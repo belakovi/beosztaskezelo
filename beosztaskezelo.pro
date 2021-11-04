@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     adatkezelo.cpp \
+    comboboxitemdelegate.cpp \
     filekezelo.cpp \
     general.cpp \
     main.cpp \
@@ -17,6 +18,7 @@ SOURCES += \
 
 HEADERS += \
     adatkezelo.h \
+    comboboxitemdelegate.h \
     filekezelo.h \
     general.h \
     mainwindow.h

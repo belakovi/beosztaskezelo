@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1180</width>
-    <height>643</height>
+    <width>1193</width>
+    <height>728</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -60,18 +60,14 @@ color: rgb(255, 255, 255);</string>
     <string>Mégse</string>
    </property>
   </widget>
-  <widget class="QTableView" name="tableView">
+  <widget class="QTableWidget" name="tableWidget">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>50</y>
+     <x>20</x>
+     <y>20</y>
      <width>741</width>
-     <height>471</height>
+     <height>411</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgb(255, 255, 255);
-color: rgb(0, 0, 0);</string>
    </property>
   </widget>
  </widget>

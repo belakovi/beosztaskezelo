@@ -2,24 +2,17 @@
 #include "ui_adatkezelo.h"
 #include <QMessageBox>
 #include <QTableView>
+#include <QTableWidget>
 #include <QComboBox>
 #include "filekezelo.h"
+#include "comboboxitemdelegate.h"
 
 Adatkezelo::Adatkezelo(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Adatkezelo)
 {
     ui->setupUi(this);
-    model = new QStandardItemModel(200,3);
-    model->setHeaderData(0, Qt::Horizontal, "Név");
-    model->setHeaderData(1, Qt::Horizontal, "Beosztás");
-    model->setHeaderData(2, Qt::Horizontal, "Email");
-
-    ui->tableView->horizontalHeader()->setStyleSheet( "QHeaderView::section { border-bottom: 1px solid gray; background-color: black; color: white}");
-    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->tableView->setEditTriggers(QAbstractItemView::AnyKeyPressed);
-    ui->tableView->sortByColumn(0, Qt::AscendingOrder);
-
+ /*
     adatbazisFile = new filekezelo;
     if (adatbazisFile->filenyitas("./adatbazis.txt") == EMPTYFILE)
     {
@@ -45,12 +38,17 @@ Adatkezelo::Adatkezelo(QWidget *parent) :
             }
         }
     }
-    ui->tableView->setModel(model);
-    QComboBox c;
-    c.addItems({"Nappali","Ejszakai"});
-    ui->tableView->setIndexWidget(ui->tableView->model()->index(1,2), c);
+*/
+    ComboBoxItemDelegate* cbid = new ComboBoxItemDelegate(ui->tableWidget);
+    // ComboBox only in column 2
+    ui->tableWidget->setItemDelegateForColumn(1, cbid);
+    ui->tableWidget->setColumnCount(3);
+    ui->tableWidget->setRowCount(200);
+    m_TableHeader<<"Név"<<"Beosztás"<<"Email";
+    ui->tableWidget->setHorizontalHeaderLabels(m_TableHeader);
 
-    connect(ui->tableView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onTableClicked(const QModelIndex &)));
+    //connect(ui->tableView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onTableClicked(const QModelIndex &)));
+
 }
 
 Adatkezelo::~Adatkezelo()
@@ -58,7 +56,6 @@ Adatkezelo::~Adatkezelo()
     adatbazisFile->closefile();
     delete ui;
 }
-
 
 void Adatkezelo::on_ButtonCancel_clicked()
 {
@@ -68,7 +65,7 @@ void Adatkezelo::on_ButtonCancel_clicked()
 void Adatkezelo::on_ButtonSave_clicked()
 {
     QString text = "";
-
+/*
     for (int row = 0; row < model->rowCount(); row++)
     {
         for (int col = 0; col < model->columnCount(); col++)
@@ -77,4 +74,6 @@ void Adatkezelo::on_ButtonSave_clicked()
         }
     }
     adatbazisFile->overwritefile(text);
+*/
+    Adatkezelo::close();
 }

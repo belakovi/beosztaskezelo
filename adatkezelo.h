@@ -30,7 +30,7 @@ private:
     Ui::Adatkezelo *ui;
     QStandardItemModel *model;
     filekezelo *adatbazisFile;
-
+    QStringList m_TableHeader;
 };
 
 #endif // ADATKEZELO_H
