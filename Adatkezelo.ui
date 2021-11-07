@@ -60,13 +60,13 @@ color: rgb(255, 255, 255);</string>
     <string>Mégse</string>
    </property>
   </widget>
-  <widget class="QTableWidget" name="tableWidget">
+  <widget class="QTableView" name="tableView">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>40</x>
      <y>20</y>
-     <width>741</width>
-     <height>411</height>
+     <width>801</width>
+     <height>551</height>
     </rect>
    </property>
   </widget>

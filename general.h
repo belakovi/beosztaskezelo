@@ -3,6 +3,13 @@
 
 #include <QDialog>
 #include <QStandardItemModel>
+#include "dbmanager.h"
+
+typedef struct {
+    QString nev;
+    QString muszak;
+    QString email;
+} DbRecord;
 
 namespace Ui {
 class General;
@@ -19,6 +26,8 @@ public:
 private:
     Ui::General *ui;
     QStandardItemModel *model;
+    DbManager *adatbazis;
+    list<DbRecord> *dbRecords;
 };
 
 #endif // GENERAL_H

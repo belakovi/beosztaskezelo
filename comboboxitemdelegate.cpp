@@ -38,3 +38,15 @@ void ComboBoxItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
     Q_ASSERT(cb);
     model->setData(index, cb->currentText(), Qt::EditRole);
 }
+
+void ComboBoxItemDelegate::onComboChanged(const QString & text)
+{
+    qDebug() << "onComboChanged " << text;
+    QComboBox * comboBox = dynamic_cast<QComboBox *>(sender());
+
+    if(comboBox)
+     {
+         int column = comboBox->objectName().toInt();  // retrieve column number
+         qDebug() << "Dropdown: cols " << column << " : " << comboBox->currentText() << " index " << comboBox->currentIndex();
+     }
+}

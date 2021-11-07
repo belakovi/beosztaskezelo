@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -11,7 +11,7 @@ CONFIG += c++11
 SOURCES += \
     adatkezelo.cpp \
     comboboxitemdelegate.cpp \
-    filekezelo.cpp \
+    dbmanager.cpp \
     general.cpp \
     main.cpp \
     mainwindow.cpp
@@ -19,7 +19,7 @@ SOURCES += \
 HEADERS += \
     adatkezelo.h \
     comboboxitemdelegate.h \
-    filekezelo.h \
+    dbmanager.h \
     general.h \
     mainwindow.h
 

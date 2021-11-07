@@ -3,10 +3,8 @@
 
 #include <QDialog>
 #include <QStandardItemModel>
-#include <QFile>
-#include <filekezelo.h>
-
-
+#include <QTableView>
+#include <dbmanager.h>
 
 namespace Ui {
 class Adatkezelo;
@@ -28,9 +26,9 @@ private slots:
 
 private:
     Ui::Adatkezelo *ui;
+    QTableView *table;
     QStandardItemModel *model;
-    filekezelo *adatbazisFile;
-    QStringList m_TableHeader;
+    DbManager *adatbazis;
 };
 
 #endif // ADATKEZELO_H
