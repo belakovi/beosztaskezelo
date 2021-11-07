@@ -36,7 +36,7 @@ int DbManager::getAllRecord()
     if (!query->exec())
     {
         QMessageBox msgBox;
-        QString hiba("Adatbazis hiba: %1");
+        QString hiba("Adatbazis hiba (getAllRecord): %1");
         msgBox.setText(hiba.arg(query->lastError().text()));
         msgBox.exec();
         delete query;
@@ -76,7 +76,7 @@ int DbManager::clearTable()
     if (!query.exec())
     {
         QMessageBox msgBox;
-        QString hiba("Adatbazis hiba: %1");
+        QString hiba("Adatbazis hiba (clearTable): %1");
         msgBox.setText(hiba.arg(query.lastError().text()));
         msgBox.exec();
         return PROBLEM;
@@ -97,7 +97,7 @@ int DbManager::addRecord(int id, QStringList szemelyAdat)
    if(!query.exec())
    {
        QMessageBox msgBox;
-       QString hiba("Adatbazis hiba: %1");
+       QString hiba("Adatbazis hiba (addRecord): %1");
        msgBox.setText(hiba.arg(query.lastError().text()));
        msgBox.exec();
        return PROBLEM;

@@ -39,6 +39,8 @@ General::General(QWidget *parent) :
             oneRow = adatbazis->getNextRecord();
         }
     }
+
+
 }
 
 General::~General()

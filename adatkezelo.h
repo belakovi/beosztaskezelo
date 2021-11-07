@@ -21,8 +21,8 @@ public:
 
 private slots:
     void on_ButtonSave_clicked();
-
     void on_ButtonCancel_clicked();
+    bool checkSameNameInTable();
 
 private:
     Ui::Adatkezelo *ui;

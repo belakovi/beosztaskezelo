@@ -49,8 +49,38 @@ void Adatkezelo::on_ButtonCancel_clicked()
     Adatkezelo::close();
 }
 
+bool Adatkezelo::checkSameNameInTable()
+{
+    QModelIndex refModelIndex, modelIndex;
+    int maxRows = model->rowCount();
+    for (int row=0; row<maxRows; row++)
+    {
+        refModelIndex = model->index(row, 0, QModelIndex());
+        for (int rest=row+1; rest<maxRows; rest++)
+        {
+            modelIndex = model->index(rest, 0, QModelIndex());
+            if (ui->tableView->model()->data(modelIndex).toString() != "" &&
+                ui->tableView->model()->data(modelIndex).toString() ==
+                ui->tableView->model()->data(refModelIndex).toString())
+            {
+                QMessageBox msgBox;
+                QString hiba("Nem lehet ugyanaz a nev: %1");
+                msgBox.setText(hiba.arg(ui->tableView->model()->data(modelIndex).toString()));
+                msgBox.exec();
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 void Adatkezelo::on_ButtonSave_clicked()
 {
+    if (checkSameNameInTable())
+    {
+        return;
+    }
+
     if (adatbazis->clearTable() == SUCCESS)
     {
         QStringList record;
