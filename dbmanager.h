@@ -15,7 +15,7 @@ public:
     DbManager();
     ~DbManager();
     int clearTable();
-    int addRecord(int id, QStringList data);
+    int addRecord(QStringList data);
     void findPerson(QString nev);
     int getRecordCount();
     int getAllRecord();

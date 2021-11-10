@@ -17,7 +17,7 @@ Adatkezelo::Adatkezelo(QWidget *parent) :
     adatbazis = new DbManager();
 
     model = new QStandardItemModel(MAXROW, MAXCOLUMN, this);
-    model->setHorizontalHeaderLabels({"Nev" , "Muszak" , "email"});
+    model->setHorizontalHeaderLabels({"Név", "Részleg", "Muszak" , "email"});
 
     if (!adatbazis->getAllRecord())
     {
@@ -27,10 +27,12 @@ Adatkezelo::Adatkezelo(QWidget *parent) :
         {
             QStandardItem *nev = new QStandardItem(oneRow.at(0));
             model->setItem(tableRow, 0, nev);
-            QStandardItem *muszak = new QStandardItem(oneRow.at(1));
-            model->setItem(tableRow, 1, muszak);
-            QStandardItem *email = new QStandardItem(oneRow.at(2));
-            model->setItem(tableRow, 2, email);
+            QStandardItem *reszleg = new QStandardItem(oneRow.at(1));
+            model->setItem(tableRow, 1, reszleg);
+            QStandardItem *muszak = new QStandardItem(oneRow.at(2));
+            model->setItem(tableRow, 2, muszak);
+            QStandardItem *email = new QStandardItem(oneRow.at(3));
+            model->setItem(tableRow, 3, email);
             tableRow++;
             oneRow = adatbazis->getNextRecord();
         }
@@ -85,7 +87,6 @@ void Adatkezelo::on_ButtonSave_clicked()
     {
         QStringList record;
         QModelIndex index;
-        int dbId = 0;
         for (int row=0; row<model->rowCount(); row++)
         {
             record.clear();
@@ -95,9 +96,11 @@ void Adatkezelo::on_ButtonSave_clicked()
             record << ui->tableView->model()->data(index).toString();
             index = model->index(row, 2, QModelIndex());
             record << ui->tableView->model()->data(index).toString();
+            index = model->index(row, 3, QModelIndex());
+            record << ui->tableView->model()->data(index).toString();
             if (!record.at(0).isEmpty())
             {
-                adatbazis->addRecord(dbId++, record);
+                adatbazis->addRecord(record);
             }
         }
     }

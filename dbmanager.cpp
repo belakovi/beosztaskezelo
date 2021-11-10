@@ -50,6 +50,7 @@ QStringList DbManager::getNextRecord()
     QStringList oneRecord = {};
     if( query->next() )
     {
+        oneRecord << query->value(0).toString();
         oneRecord << query->value(1).toString();
         oneRecord << query->value(2).toString();
         oneRecord << query->value(3).toString();
@@ -84,16 +85,16 @@ int DbManager::clearTable()
     return SUCCESS;
 }
 
-int DbManager::addRecord(int id, QStringList szemelyAdat)
+int DbManager::addRecord(QStringList szemelyAdat)
 {
    QSqlQuery query;
 
-   query.prepare("INSERT INTO beosztas (id, nev, muszak, email) "
-                 "VALUES (:id, :name, :beosztas, :email)");
-   query.bindValue(":id", id);
+   query.prepare("INSERT INTO beosztas (nev, reszleg, muszak, email) "
+                 "VALUES (:name, :reszleg, :muszak, :email)");
    query.bindValue(":name", szemelyAdat.at(0));
-   query.bindValue(":beosztas", szemelyAdat.at(1));
-   query.bindValue(":email", szemelyAdat.at(2));
+   query.bindValue(":reszleg", szemelyAdat.at(1));
+   query.bindValue(":muszak", szemelyAdat.at(2));
+   query.bindValue(":email", szemelyAdat.at(3));
    if(!query.exec())
    {
        QMessageBox msgBox;
