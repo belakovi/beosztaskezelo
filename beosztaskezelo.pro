@@ -14,14 +14,16 @@ SOURCES += \
     dbmanager.cpp \
     general.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    mymodel.cpp
 
 HEADERS += \
     adatkezelo.h \
     comboboxitemdelegate.h \
     dbmanager.h \
     general.h \
-    mainwindow.h
+    mainwindow.h \
+    mymodel.h
 
 FORMS += \
     adatkezelo.ui \

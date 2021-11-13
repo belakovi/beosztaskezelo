@@ -10,16 +10,19 @@
 General::General(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::General)
-{
+{    
+    myModel = new MyModel();
+    actMuszak = "";
+    actReszleg = "";
     ui->setupUi(this);
+    ui->naptar->setStyleSheet("QHeaderView::section { background-color:gray }");
 
     ui->Ev->addItems({"2021", "2022", "2023", "2024", "2025"});
     ui->Honap->setCurrentIndex(QDate::currentDate().year()-2021);
     ui->Honap->addItems(honapok);
     ui->Honap->setMinimumWidth(ui->Honap->minimumSizeHint().width());
     ui->Honap->setCurrentIndex(QDate::currentDate().month()-1);
-
-    ui->naptar->setModel(model);
+    ui->muszakCombo->addItems(muszakok);
 
     adatbazis = new DbManager();
     //get all records from DB
@@ -27,15 +30,24 @@ General::General(QWidget *parent) :
     {
         DbRecord dbRecord;
         QStringList oneRow = adatbazis->getNextRecord();
+        QStringList reszlegList;
         while (!oneRow.isEmpty())
         {
             dbRecord.nev = oneRow.at(0);
-            dbRecord.muszak = oneRow.at(1);
-            dbRecord.email = oneRow.at(2);
+            dbRecord.reszleg = oneRow.at(1);
+            dbRecord.muszak = oneRow.at(2);
+            dbRecord.email = oneRow.at(3);
             dbRecords.push_back(dbRecord);
             oneRow = adatbazis->getNextRecord();
+
+            if (!reszlegList.contains(dbRecord.reszleg))
+                reszlegList.push_back(dbRecord.reszleg);
         }
+        ui->reszleg->addItems(reszlegList);
     }
+
+    ui->naptar->setModel(myModel);
+    ui->naptar->show();
 }
 
 General::~General()
@@ -55,33 +67,95 @@ int General::getWeekNumbers(int startYear, int startMonth)
 
 void General::on_Honap_currentTextChanged(const QString &arg1)
 {
+    myModel->clearTable();
     QDate currentDay;
     currentDay.setDate(ui->Ev->currentText().toInt(), honapok.indexOf(arg1, 0)+1, 1);
     int rows = getWeekNumbers(currentDay.year(), currentDay.month());
-    model = new QStandardItemModel(rows, napok.count(), this);
-    model->setHorizontalHeaderLabels(napok);
+    myModel->setRowCount(rows);
+    myModel->setColCount(7); //napok szama egy heten
     ui->naptar->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->naptar->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     int refWeekNumber = currentDay.weekNumber();
     for (int rowIndex=0; rowIndex<rows; rowIndex++)
     {
-        model->setHeaderData(rowIndex, Qt::Vertical, refWeekNumber+rowIndex);
+        myModel->setColumnHeader(rowIndex, QString::number(refWeekNumber+rowIndex));
         if (refWeekNumber >= 53)
             refWeekNumber = 0;
     }
-    ui->naptar->setModel(model);
-    //show days
+    setDatesInCell(currentDay);
+}
+
+void General::setDatesInCell(QDate currentDay)
+{
     int col;
+    int maxRow = myModel->rowCount();
     int days = 1;
-    for (int row=0; row<rows; row++)
+    for (int row=0; row<maxRow; row++)
     {
         if (row==0) col = currentDay.dayOfWeek()-1;
         else col =0;
+        if (col) //set previous month's days
+        {
+            QDate prevMonth = currentDay.addMonths(-1);
+            int startDay = prevMonth.daysInMonth()+1-col;
+            for (int i=0; i<col; i++)
+            {
+                myModel->setCellDay(0, i, startDay++);
+            }
+        }
+        //set current month
         while (col<7 && days<=currentDay.daysInMonth())
         {
-            QStandardItem *cellItem = new QStandardItem(QString::number(days++));
-            model->setItem(row, col++, cellItem);
+            myModel->setCellDay(row, col++, days++);
+        }
+        //set next month
+        if (row+1==maxRow)
+        {
+            days =1;
+            while (col<7)
+            {
+                myModel->setCellDay(row, col++, days++);
+            }
         }
     }
+}
+
+void General::updateBeosztas()
+{
+    filteredRecords.clear();
+    for (DbRecord const &record : dbRecords)
+    {
+        if ((record.reszleg == actReszleg || actReszleg == "") &&
+            (record.muszak == actMuszak || actMuszak == ""))
+        {
+            filteredRecords.push_back(record);
+        }
+    }
+
+    int maxRow = myModel->rowCount();
+    int maxCol = myModel->columnCount();
+    for (int row=0; row<maxRow; row++)
+    {
+        for (int col=0; col<maxCol; col++)
+        {
+            for (DbRecord const &record : filteredRecords)
+            {
+                myModel->setCellText(row, col, record.nev);
+            }
+        }
+    }
+}
+
+void General::on_reszleg_currentTextChanged(const QString &currentReszleg)
+{
+    actReszleg = currentReszleg;
+    updateBeosztas();
+}
+
+
+void General::on_muszakCombo_currentTextChanged(const QString &currentMuszak)
+{
+    actMuszak = currentMuszak;
+    updateBeosztas();
 }
 
