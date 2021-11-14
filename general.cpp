@@ -134,24 +134,30 @@ void General::updateBeosztas()
     {
         for (int col=0; col<maxCol; col++)
         {
-            for (DbRecord const &record : filteredRecords)
+            if (filteredRecords.size()==0)
             {
-                myModel->setCellText(row, col, record.nev);
+                myModel->setCellText(row, col, "");
+            }
+            else
+            {
+                for (DbRecord const &record : filteredRecords)
+                {
+                    myModel->setCellText(row, col, record.nev);
+                }
             }
         }
     }
 }
 
-void General::on_reszleg_currentTextChanged(const QString &currentReszleg)
+void General::on_muszakCombo_currentIndexChanged(int index)
 {
-    actReszleg = currentReszleg;
+    actMuszak = muszakok.at(index);
     updateBeosztas();
 }
 
-
-void General::on_muszakCombo_currentTextChanged(const QString &currentMuszak)
+void General::on_reszleg_currentIndexChanged(int index)
 {
-    actMuszak = currentMuszak;
+    actReszleg = reszlegek.at(index);
     updateBeosztas();
 }
 

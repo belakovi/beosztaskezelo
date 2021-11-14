@@ -36,9 +36,9 @@ public:
 private slots:
     void on_Honap_currentTextChanged(const QString &arg1);
 
-    void on_reszleg_currentTextChanged(const QString &arg1);
+    void on_muszakCombo_currentIndexChanged(int index);
 
-    void on_muszakCombo_currentTextChanged(const QString &arg1);
+    void on_reszleg_currentIndexChanged(int index);
 
 private:
     Ui::General *ui;
@@ -46,7 +46,7 @@ private:
     DbManager *adatbazis;
     list<DbRecord> dbRecords;
     list<DbRecord> filteredRecords;
-    QString actMuszak, actReszleg;
+    QString actMuszak = "", actReszleg = "";
     MyModel *myModel;
 };
 
