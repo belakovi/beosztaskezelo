@@ -1,10 +1,10 @@
 #include "adatkezelo.h"
 #include "ui_adatkezelo.h"
 #include <QMessageBox>
-#include <QTableView>
-#include <QStandardItem>
-#include <QStandardItemModel>
+
 #include "dbmanager.h"
+#include "comboboxitemdelegate.h"
+#include "general.h"
 
 #define MAXROW 22
 #define MAXCOLUMN 3
@@ -13,37 +13,37 @@ Adatkezelo::Adatkezelo(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Adatkezelo)
 {
+    myModel = new DbModel();
     ui->setupUi(this);
+    ui->tableView->setStyleSheet("QHeaderView::section { background-color:gray }");
+
+    ComboBoxItemDelegate* cbMuszak = new ComboBoxItemDelegate(ui->tableView, muszakok);
+    ui->tableView->setItemDelegateForColumn(2, cbMuszak);
+
+    ComboBoxItemDelegate* cbReszleg = new ComboBoxItemDelegate(ui->tableView, reszlegek);
+    ui->tableView->setItemDelegateForColumn(1, cbReszleg);
+
     adatbazis = new DbManager();
-
-    model = new QStandardItemModel(MAXROW, MAXCOLUMN, this);
-    model->setHorizontalHeaderLabels({"Név", "Részleg", "Muszak" , "email"});
-
+    int rowCount = adatbazis->getRecordCount();
+    myModel->setRowCount(rowCount+100);
+    QStringList oneRow;
     if (!adatbazis->getAllRecord())
     {
-        QStringList oneRow = adatbazis->getNextRecord();
-        int tableRow = 0;
-        while (!oneRow.isEmpty())
+        for (int cnt=0; cnt<rowCount; cnt++)
         {
-            QStandardItem *nev = new QStandardItem(oneRow.at(0));
-            model->setItem(tableRow, 0, nev);
-            QStandardItem *reszleg = new QStandardItem(oneRow.at(1));
-            model->setItem(tableRow, 1, reszleg);
-            QStandardItem *muszak = new QStandardItem(oneRow.at(2));
-            model->setItem(tableRow, 2, muszak);
-            QStandardItem *email = new QStandardItem(oneRow.at(3));
-            model->setItem(tableRow, 3, email);
-            tableRow++;
             oneRow = adatbazis->getNextRecord();
+            myModel->addTableData(oneRow);
+            oneRow.clear();
         }
     }
-    ui->tableView->setModel(model);
+    ui->tableView->setModel(myModel);
 }
 
 Adatkezelo::~Adatkezelo()
 {
     delete ui;
     delete adatbazis;
+    delete myModel;
 }
 
 void Adatkezelo::on_ButtonCancel_clicked()
@@ -51,57 +51,26 @@ void Adatkezelo::on_ButtonCancel_clicked()
     Adatkezelo::close();
 }
 
-bool Adatkezelo::checkSameNameInTable()
-{
-    QModelIndex refModelIndex, modelIndex;
-    int maxRows = model->rowCount();
-    for (int row=0; row<maxRows; row++)
-    {
-        refModelIndex = model->index(row, 0, QModelIndex());
-        for (int rest=row+1; rest<maxRows; rest++)
-        {
-            modelIndex = model->index(rest, 0, QModelIndex());
-            if (ui->tableView->model()->data(modelIndex).toString() != "" &&
-                ui->tableView->model()->data(modelIndex).toString() ==
-                ui->tableView->model()->data(refModelIndex).toString())
-            {
-                QMessageBox msgBox;
-                QString hiba("Nem lehet ugyanaz a nev: %1");
-                msgBox.setText(hiba.arg(ui->tableView->model()->data(modelIndex).toString()));
-                msgBox.exec();
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
 void Adatkezelo::on_ButtonSave_clicked()
 {
-    if (checkSameNameInTable())
+    QString name;
+    if ((name=myModel->checkSameName())!="")
     {
+        QMessageBox msgBox;
+        QString hiba("Nem lehet ugyanaz a nev: %1");
+        msgBox.setText(hiba.arg(name));
+        msgBox.exec();
         return;
     }
 
     if (adatbazis->clearTable() == SUCCESS)
     {
-        QStringList record;
-        QModelIndex index;
-        for (int row=0; row<model->rowCount(); row++)
+        int index = 0;
+        DbData oneRowData = myModel->getOneRowData(index++);
+        while (oneRowData.nev != "")
         {
-            record.clear();
-            index = model->index(row, 0, QModelIndex());
-            record << ui->tableView->model()->data(index).toString();
-            index = model->index(row, 1, QModelIndex());
-            record << ui->tableView->model()->data(index).toString();
-            index = model->index(row, 2, QModelIndex());
-            record << ui->tableView->model()->data(index).toString();
-            index = model->index(row, 3, QModelIndex());
-            record << ui->tableView->model()->data(index).toString();
-            if (!record.at(0).isEmpty())
-            {
-                adatbazis->addRecord(record);
-            }
+            adatbazis->addRecord(oneRowData);
+            oneRowData = myModel->getOneRowData(index++);
         }
     }
     Adatkezelo::close();

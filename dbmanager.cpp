@@ -3,6 +3,7 @@
 #include <QSqlRecord>
 #include <QSqlError>
 #include <QStringList>
+#include <QDate>
 #include "dbmanager.h"
 
 DbManager::DbManager()
@@ -54,6 +55,7 @@ QStringList DbManager::getNextRecord()
         oneRecord << query->value(1).toString();
         oneRecord << query->value(2).toString();
         oneRecord << query->value(3).toString();
+        oneRecord << query->value(4).toString();
     }
     else
     {
@@ -85,16 +87,17 @@ int DbManager::clearTable()
     return SUCCESS;
 }
 
-int DbManager::addRecord(QStringList szemelyAdat)
+int DbManager::addRecord(DbData szemelyAdat)
 {
    QSqlQuery query;
 
-   query.prepare("INSERT INTO beosztas (nev, reszleg, muszak, email) "
-                 "VALUES (:name, :reszleg, :muszak, :email)");
-   query.bindValue(":name", szemelyAdat.at(0));
-   query.bindValue(":reszleg", szemelyAdat.at(1));
-   query.bindValue(":muszak", szemelyAdat.at(2));
-   query.bindValue(":email", szemelyAdat.at(3));
+   query.prepare("INSERT INTO beosztas (nev, reszleg, muszak, muszak_start, email) "
+                 "VALUES (:name, :reszleg, :muszak, :mdate, :email)");
+   query.bindValue(":name", szemelyAdat.nev);
+   query.bindValue(":reszleg", szemelyAdat.reszleg);
+   query.bindValue(":muszak", szemelyAdat.muszak);
+   query.bindValue(":mdate", szemelyAdat.startDate);
+   query.bindValue(":email", szemelyAdat.email);
    if(!query.exec())
    {
        QMessageBox msgBox;

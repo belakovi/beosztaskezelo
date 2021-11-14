@@ -22,7 +22,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     void setRowCount(int row);
     void setColCount(int col);
-    void setColumnHeader(int column, QString cHeader);
+    void addRowHeader(QString cHeader);
     void setCellDay(int row, int col, int data);
     void setCellText(int row, int col, QString data);
     void clearTable(void);
@@ -30,7 +30,8 @@ public:
 private:
     int numberOfRow = 0;
     int numberOfColumn = 0;
-    QString columnHeader[7];
+    QStringList rowHeader;
     CellData cellData[MAXHET][MAXNAP];
+    const QStringList columnHeader = {"Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"};
 };
 #endif // MYMODEL_H

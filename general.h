@@ -16,6 +16,7 @@ typedef struct {
 const QStringList honapok = {"Január", "Február", "Március", "Április", "Május", "Június",
                              "Július", "Augusztus", "Szeptember", "Október", "November", "December"};
 const QStringList muszakok = {"Nappali", "Éjszakai"};
+const QStringList reszlegek = {"Ápoló", "Karbantartó", "Orvos", "Portás", "Takarító"};
 
 namespace Ui {
 class General;

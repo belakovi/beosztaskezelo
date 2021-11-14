@@ -25,34 +25,19 @@ int MyModel::columnCount(const QModelIndex & /*parent*/) const
     return numberOfColumn;
 }
 
-void MyModel::setColumnHeader(int column, QString cHeader)
+void MyModel::addRowHeader(QString cHeader)
 {
-    columnHeader[column] = cHeader;
+    rowHeader.push_back(cHeader);
 }
 
 QVariant MyModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
-        switch (section) {
-        case 0:
-            return QString("Hétfő");
-        case 1:
-            return QString("Kedd");
-        case 2:
-            return QString("Szerda");
-        case 3:
-            return QString("Csütörtök");
-        case 4:
-            return QString("Péntek");
-        case 5:
-            return QString("Szombat");
-        case 6:
-            return QString("Vasárnap");
-        }
+        return columnHeader.at(section);
     }
 
     if (role == Qt::DisplayRole && orientation == Qt::Vertical) {
-        return columnHeader[section];
+        return rowHeader.at(section);
     }
     return QVariant();
 }
@@ -62,7 +47,7 @@ void MyModel::clearTable()
     beginResetModel();
     numberOfRow = 0;
     numberOfColumn = 0;
-    memset (columnHeader, 0, sizeof (columnHeader));
+    rowHeader.clear();
     memset (cellData, 0, sizeof (cellData));
     endResetModel();
 }

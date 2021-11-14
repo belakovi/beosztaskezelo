@@ -23,6 +23,7 @@ General::General(QWidget *parent) :
     ui->Honap->setMinimumWidth(ui->Honap->minimumSizeHint().width());
     ui->Honap->setCurrentIndex(QDate::currentDate().month()-1);
     ui->muszakCombo->addItems(muszakok);
+    ui->reszleg->addItems(reszlegek);
 
     adatbazis = new DbManager();
     //get all records from DB
@@ -30,7 +31,6 @@ General::General(QWidget *parent) :
     {
         DbRecord dbRecord;
         QStringList oneRow = adatbazis->getNextRecord();
-        QStringList reszlegList;
         while (!oneRow.isEmpty())
         {
             dbRecord.nev = oneRow.at(0);
@@ -39,11 +39,7 @@ General::General(QWidget *parent) :
             dbRecord.email = oneRow.at(3);
             dbRecords.push_back(dbRecord);
             oneRow = adatbazis->getNextRecord();
-
-            if (!reszlegList.contains(dbRecord.reszleg))
-                reszlegList.push_back(dbRecord.reszleg);
         }
-        ui->reszleg->addItems(reszlegList);
     }
 
     ui->naptar->setModel(myModel);
@@ -78,7 +74,7 @@ void General::on_Honap_currentTextChanged(const QString &arg1)
     int refWeekNumber = currentDay.weekNumber();
     for (int rowIndex=0; rowIndex<rows; rowIndex++)
     {
-        myModel->setColumnHeader(rowIndex, QString::number(refWeekNumber+rowIndex));
+        myModel->addRowHeader(QString::number(refWeekNumber+rowIndex));
         if (refWeekNumber >= 53)
             refWeekNumber = 0;
     }

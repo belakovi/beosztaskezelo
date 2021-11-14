@@ -12,6 +12,7 @@ SOURCES += \
     adatkezelo.cpp \
     comboboxitemdelegate.cpp \
     dbmanager.cpp \
+    dbmodel.cpp \
     general.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -21,6 +22,7 @@ HEADERS += \
     adatkezelo.h \
     comboboxitemdelegate.h \
     dbmanager.h \
+    dbmodel.h \
     general.h \
     mainwindow.h \
     mymodel.h

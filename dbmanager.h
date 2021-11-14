@@ -2,6 +2,7 @@
 #define DBMANAGER_H
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include "dbmodel.h"
 
 using namespace std;
 
@@ -15,7 +16,7 @@ public:
     DbManager();
     ~DbManager();
     int clearTable();
-    int addRecord(QStringList data);
+    int addRecord(DbData data);
     void findPerson(QString nev);
     int getRecordCount();
     int getAllRecord();
