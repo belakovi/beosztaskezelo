@@ -6,6 +6,7 @@
 #include <QComboBox>
 #include <QDate>
 #include <QCalendar>
+#include <QtDebug>
 
 General::General(QWidget *parent) :
     QDialog(parent),
@@ -23,7 +24,9 @@ General::General(QWidget *parent) :
     ui->Honap->setMinimumWidth(ui->Honap->minimumSizeHint().width());
     ui->Honap->setCurrentIndex(QDate::currentDate().month()-1);
     ui->muszakCombo->addItems(muszakok);
+    ui->muszakCombo->setCurrentIndex(0);
     ui->reszleg->addItems(reszlegek);
+    ui->reszleg->setCurrentIndex(0);
 
     adatbazis = new DbManager();
     //get all records from DB
@@ -36,7 +39,8 @@ General::General(QWidget *parent) :
             dbRecord.nev = oneRow.at(0);
             dbRecord.reszleg = oneRow.at(1);
             dbRecord.muszak = oneRow.at(2);
-            dbRecord.email = oneRow.at(3);
+            dbRecord.date = oneRow.at(3);
+            dbRecord.email = oneRow.at(4);
             dbRecords.push_back(dbRecord);
             oneRow = adatbazis->getNextRecord();
         }
@@ -128,6 +132,7 @@ void General::updateBeosztas()
         }
     }
 
+
     int maxRow = myModel->rowCount();
     int maxCol = myModel->columnCount();
     for (int row=0; row<maxRow; row++)
@@ -142,11 +147,14 @@ void General::updateBeosztas()
             {
                 for (DbRecord const &record : filteredRecords)
                 {
+                    qDebug() << QString("updateBeosztas %1 %2 %3").arg(row).arg(col).arg(record.nev);
+
                     myModel->setCellText(row, col, record.nev);
                 }
             }
         }
     }
+    myModel->updateFinished();
 }
 
 void General::on_muszakCombo_currentIndexChanged(int index)
@@ -160,4 +168,3 @@ void General::on_reszleg_currentIndexChanged(int index)
     actReszleg = reszlegek.at(index);
     updateBeosztas();
 }
-

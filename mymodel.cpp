@@ -62,6 +62,15 @@ void MyModel::setCellText(int row, int col, QString data)
     cellData[row][col].text = data;
 }
 
+void MyModel::updateFinished(){
+     QModelIndex topLeft = index(0, 0);
+     QModelIndex bottomRight = index(numberOfRow, numberOfColumn);
+     //beginResetModel();
+     //emit  layoutAboutToBeChanged();
+     //emit layoutChanged();
+     emit dataChanged(topLeft,bottomRight);
+}
+
 QVariant MyModel::data(const QModelIndex &index, int role) const
 {
     int row = index.row();

@@ -26,6 +26,7 @@ public:
     void setCellDay(int row, int col, int data);
     void setCellText(int row, int col, QString data);
     void clearTable(void);
+    void updateFinished();
 
 private:
     int numberOfRow = 0;

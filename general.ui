@@ -50,6 +50,9 @@
      <bold>true</bold>
     </font>
    </property>
+   <property name="currentIndex">
+    <number>-1</number>
+   </property>
   </widget>
   <widget class="QComboBox" name="Ev">
    <property name="geometry">

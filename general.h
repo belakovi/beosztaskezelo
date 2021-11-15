@@ -10,6 +10,7 @@ typedef struct {
     QString nev;
     QString reszleg;
     QString muszak;
+    QString date;
     QString email;
 } DbRecord;
 
@@ -39,6 +40,7 @@ private slots:
     void on_muszakCombo_currentIndexChanged(int index);
 
     void on_reszleg_currentIndexChanged(int index);
+
 
 private:
     Ui::General *ui;
