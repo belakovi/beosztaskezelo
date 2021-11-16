@@ -27,6 +27,7 @@ public:
     void setCellText(int row, int col, QString data);
     void clearTable(void);
     void updateFinished();
+    QString getRowHeader(int row);
 
 private:
     int numberOfRow = 0;

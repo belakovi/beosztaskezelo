@@ -66,7 +66,7 @@ void Adatkezelo::on_ButtonSave_clicked()
     if (adatbazis->clearTable() == SUCCESS)
     {
         int index = 0;
-        DbData oneRowData = myModel->getOneRowData(index++);
+        DbRecord oneRowData = myModel->getOneRowData(index++);
         while (oneRowData.nev != "")
         {
             adatbazis->addRecord(oneRowData);

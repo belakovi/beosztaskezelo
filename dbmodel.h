@@ -13,9 +13,14 @@ typedef struct {
     QString nev;
     QString reszleg;
     QString muszak;
-    QString startDate;
+    QString date;
     QString email;
-} DbData;
+} DbRecord;
+
+typedef struct {
+    QString nev;
+    QString hetiBeosztas;
+} DbBeosztas;
 
 class DbModel : public QAbstractTableModel
 {
@@ -31,15 +36,15 @@ public:
     void setRowCount(int row);
     void clearTable(void);
     void addTableData(QStringList data);
-    void updateTableData(int rowIndex, DbData dbData);
-    DbData getOneRowData(int rowIndex);
+    void updateTableData(int rowIndex, DbRecord dbData);
+    DbRecord getOneRowData(int rowIndex);
     QString checkSameName();
     void addOneRowToTable();
 
 private:
     int numberOfRow = 0;
-    list<DbData> rowData;
-    const QStringList columnHeader = {"Név", "Részleg", "Muszak", "Start date", "email"};
+    list<DbRecord> rowData;
+    const QStringList columnHeader = {"Név", "Részleg", "Muszak", "Munkakezdés", "Email"};
 
 signals:
     void editCompleted(const QString &);

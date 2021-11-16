@@ -35,16 +35,16 @@ QVariant DbModel::headerData(int section, Qt::Orientation orientation, int role)
 
 void DbModel::addTableData(QStringList dbData)
 {
-    DbData data;
+    DbRecord data;
     data.nev       = dbData.at(0);
     data.reszleg   = dbData.at(1);
     data.muszak    = dbData.at(2);
-    data.startDate = dbData.at(3);
+    data.date      = dbData.at(3);
     data.email     = dbData.at(4);
     rowData.push_back(data);
 }
 
-void DbModel::updateTableData(int rowIndex, DbData dbData)
+void DbModel::updateTableData(int rowIndex, DbRecord dbData)
 {
     if(rowIndex<0 || rowIndex>(int)rowData.size()) //if index points to invalid place then don't update
         return;
@@ -85,7 +85,7 @@ QVariant DbModel::data(const QModelIndex &index, int role) const
         case 2:
             return it->muszak;
         case 3:
-            return it->startDate;
+            return it->date;
         case 4:
             return it->email;
         }
@@ -94,7 +94,7 @@ QVariant DbModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-bool compare_nocase (const DbData& first, const DbData& second)
+bool compare_nocase (const DbRecord& first, const DbRecord& second)
 {
     return (first.nev<second.nev);
 }
@@ -102,8 +102,8 @@ bool compare_nocase (const DbData& first, const DbData& second)
 QString DbModel::checkSameName()
 {
     rowData.sort(compare_nocase);
-    list<DbData>::iterator it = rowData.begin();
-    list<DbData>::iterator nextIt = rowData.begin();
+    list<DbRecord>::iterator it = rowData.begin();
+    list<DbRecord>::iterator nextIt = rowData.begin();
     nextIt++;
     for (int i=0; i+1<(int)rowData.size(); i++)
     {
@@ -116,15 +116,15 @@ QString DbModel::checkSameName()
 }
 
 
-DbData DbModel::getOneRowData(int rowIndex)
+DbRecord DbModel::getOneRowData(int rowIndex)
 {
     if (  rowIndex<(int)rowData.size() )
     {
-        list<DbData>::iterator it = rowData.begin();
+        list<DbRecord>::iterator it = rowData.begin();
         advance(it, rowIndex);
         return *it;
     }
-    DbData tmp;
+    DbRecord tmp;
     tmp.nev = "";
     return tmp;
 }
@@ -140,7 +140,7 @@ bool DbModel::setData(const QModelIndex &index, const QVariant &value, int role)
         if (!checkIndex(index))
             return false;
 
-        DbData oneRowData;
+        DbRecord oneRowData;
         if ((int)rowData.size()<=index.row())
         {//update the table data before we load other row data
             rowData.push_back(oneRowData);
@@ -151,7 +151,7 @@ bool DbModel::setData(const QModelIndex &index, const QVariant &value, int role)
         case 0:
             oneRowData.nev = value.toString();
             //add default date to current date
-            oneRowData.startDate = QDate::currentDate().toString("yyyy-MM-dd");
+            oneRowData.date = QDate::currentDate().toString("yyyy-MM-dd");
             break;
         case 1:
             oneRowData.reszleg = value.toString();
@@ -161,7 +161,7 @@ bool DbModel::setData(const QModelIndex &index, const QVariant &value, int role)
             break;
         case 3:
             if (value.toString()!="")
-                oneRowData.startDate = value.toString();
+                oneRowData.date = value.toString();
             break;
         case 4:
             oneRowData.email = value.toString();

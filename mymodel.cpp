@@ -30,6 +30,11 @@ void MyModel::addRowHeader(QString cHeader)
     rowHeader.push_back(cHeader);
 }
 
+QString MyModel::getRowHeader(int row)
+{
+    return rowHeader.at(row);
+}
+
 QVariant MyModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
