@@ -86,11 +86,6 @@ void General::updateTableSettings(QString ev, QString honap)
 
 }
 
-void General::on_Honap_currentTextChanged(const QString &arg1)
-{
-    updateTableSettings(ui->Ev->currentText(), arg1);
-}
-
 void General::setDatesInCell(QDate currentDay)
 {
     int col;
@@ -144,6 +139,10 @@ void General::createBeosztas(DbRecord &dolgozok, DbBeosztas &oneRecord)
 
 void General::updateBeosztas()
 {
+    if (actReszleg=="" || actMuszak=="")
+        return;
+
+    myModel->clearCellsText();
     list<DbRecord> filteredRecords;
     for (DbRecord const &record : dbRecords)
     {
@@ -196,19 +195,24 @@ void General::updateBeosztas()
     myModel->updateFinished();
 }
 
+void General::on_Honap_currentTextChanged(const QString &arg1)
+{
+    updateTableSettings(ui->Ev->currentText(), arg1);
+    updateBeosztas();
+}
+
 void General::on_Ev_currentTextChanged(const QString &arg1)
 {
     adatbazis->createBeosztasTable(arg1);
     updateTableSettings(arg1, ui->Honap->currentText());
+    updateBeosztas();
 }
-
 
 void General::on_reszleg_currentTextChanged(const QString &arg1)
 {
     actReszleg = arg1;
     updateBeosztas();
 }
-
 
 void General::on_muszakCombo_currentTextChanged(const QString &arg1)
 {

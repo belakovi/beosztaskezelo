@@ -47,6 +47,17 @@ QVariant MyModel::headerData(int section, Qt::Orientation orientation, int role)
     return QVariant();
 }
 
+void MyModel::clearCellsText()
+{
+    for (int row=0; row<MAXHET; row++)
+    {
+        for (int col=0; col<MAXNAP; col++)
+        {
+            cellData[row][col].text = "";
+        }
+    }
+}
+
 void MyModel::clearTable()
 {
     beginResetModel();
