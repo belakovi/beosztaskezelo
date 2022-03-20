@@ -7,6 +7,8 @@
 #include <QDate>
 #include <QCalendar>
 #include <QtDebug>
+#include <QPrinter>
+#include <QPdfWriter>
 
 #define MUSZAK(x) (x==muszakok.at(0) ? 'N' : 'E')
 
@@ -14,20 +16,6 @@ General::General(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::General)
 {    
-    myModel = new MyModel();
-    ui->setupUi(this);
-    ui->naptar->setStyleSheet("QHeaderView::section { background-color:gray }");
-
-    ui->Ev->addItems({"2021", "2022", "2023", "2024", "2025"});
-    ui->Honap->setCurrentIndex(QDate::currentDate().year()-2021);
-    ui->Honap->addItems(honapok);
-    ui->Honap->setMinimumWidth(ui->Honap->minimumSizeHint().width());
-    ui->Honap->setCurrentIndex(QDate::currentDate().month()-1);
-    ui->muszakCombo->addItems(muszakok);
-    ui->muszakCombo->setCurrentIndex(0);
-    ui->reszleg->addItems(reszlegek);
-    ui->reszleg->setCurrentIndex(0);
-
     adatbazis = new DbManager();
     //get all records from DB
     if (!adatbazis->getAllRecord())
@@ -46,6 +34,19 @@ General::General(QWidget *parent) :
         }
     }
 
+    myModel = new MyModel();
+    ui->setupUi(this);
+    ui->naptar->setStyleSheet("QHeaderView::section { background-color:gray }");
+
+    ui->Ev->addItems({"2021", "2022", "2023", "2024", "2025"});
+    ui->Honap->setCurrentIndex(QDate::currentDate().year()-2021);
+    ui->Honap->addItems(honapok);
+    ui->Honap->setMinimumWidth(ui->Honap->minimumSizeHint().width());
+    ui->Honap->setCurrentIndex(QDate::currentDate().month()-1);
+    ui->muszakCombo->addItems(muszakok);
+    ui->muszakCombo->setCurrentIndex(0);
+    ui->reszleg->addItems(reszlegek);
+    ui->reszleg->setCurrentIndex(0);
     ui->naptar->setModel(myModel);
     ui->naptar->show();
 }
@@ -220,3 +221,43 @@ void General::on_muszakCombo_currentTextChanged(const QString &arg1)
     updateBeosztas();
 }
 
+void General::on_pdfButton_clicked()
+{
+    if (ui->pdfNev->toPlainText().size() == 0)
+        createReszlegPdf(ui->reszleg->currentText());
+    else
+        createDolgozoPdf(ui->pdfNev->toPlainText());
+
+}
+
+void General::createReszlegPdf(QString reszleg)
+{
+    QTextDocument doc;
+    QString text;
+    QDate currentDay;
+
+    text = QStringLiteral("<p align=center> <b><font size=+12>%1 beosztás</font></b></p>").arg(ui->Honap->currentText());
+    currentDay.setDate(ui->Ev->currentText().toInt(), ui->Honap->currentIndex()+1, 1);
+    for (int i=1; i<=currentDay.daysInMonth(); i++)
+        text += QStringLiteral("<p>%1 %2</p>").arg(ui->Honap->currentText()).arg(i);
+
+    doc.setHtml(text);
+/*minta...
+    doc.setHtml( "<p>A QTextDocument can be used to present formatted text "
+               "in a nice way.</p>"
+               "<p align=center>It can be <b>formatted</b> "
+               "<font size=+2>in</font> <i>different</i> ways.</p>"
+               "<p>The text can be really long and contain many "
+               "paragraphs. It is properly wrapped and such...</p>" );
+*/
+    QPrinter printer;
+    printer.setOutputFileName(reszleg+ui->Ev->currentText()+ui->Honap->currentText()+".pdf");
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    doc.print(&printer);
+    printer.newPage();
+}
+
+void General::createDolgozoPdf(QString dolgozo)
+{
+
+}

@@ -28,6 +28,9 @@ public:
     void updateTableSettings(QString ev, QString honap);
     void createBeosztas(DbRecord &dolgozok, DbBeosztas &oneRecord);
 
+    void createReszlegPdf(QString reszleg);
+    void createDolgozoPdf(QString reszleg);
+
 
 private slots:
     void on_Honap_currentTextChanged(const QString &arg1);
@@ -37,6 +40,8 @@ private slots:
     void on_reszleg_currentTextChanged(const QString &arg1);
 
     void on_muszakCombo_currentTextChanged(const QString &arg1);
+
+    void on_pdfButton_clicked();
 
 private:
     Ui::General *ui;
