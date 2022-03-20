@@ -4,12 +4,15 @@
 #include <QSqlError>
 #include <QStringList>
 #include <QDate>
+#include <QCoreApplication>
 #include "dbmanager.h"
 
 DbManager::DbManager()
 {
    db = QSqlDatabase::addDatabase("QSQLITE");
-   db.setDatabaseName("../beosztaskezelo/adatbazis.db");
+   //db.setDatabaseName("../beosztaskezelo/adatbazis.db");
+   QString pathAndName = QCoreApplication::applicationDirPath() + "/adatbazis.db";
+   db.setDatabaseName(pathAndName);
 
    if (!db.open())
    {

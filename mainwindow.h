@@ -17,12 +17,19 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+protected:
+    void resizeEvent(QResizeEvent *event);
+
 private slots:
    /* void on_actionAdatok_triggered();*/
 
     void on_adatok_button_clicked();
 
     void on_beosztas_button_clicked();
+
+    void on_actionAdatok_2_triggered();
+
+    void on_actionBeosztas_triggered();
 
 private:
     Ui::MainWindow *ui;
