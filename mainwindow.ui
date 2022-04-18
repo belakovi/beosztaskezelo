@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>840</width>
+    <height>640</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -26,21 +26,25 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>140</y>
-      <width>671</width>
-      <height>121</height>
+      <x>40</x>
+      <y>400</y>
+      <width>711</width>
+      <height>191</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>24</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
+      <family>Arial</family>
+      <pointsize>36</pointsize>
+      <weight>50</weight>
+      <italic>true</italic>
+      <bold>false</bold>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true"/>
+     <string notr="true">color:rgb(255, 255, 255);
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0.0898876 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));
+font: italic 36pt &quot;Arial&quot;;</string>
     </property>
     <property name="text">
      <string>Batthyány Kázmér Szakkórház
@@ -91,8 +95,39 @@ color: rgb(255, 255, 255);</string>
      <string>Adatok</string>
     </property>
    </widget>
+   <widget class="QLabel" name="hatter">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>851</width>
+      <height>601</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="pixmap">
+     <pixmap>:/Users/water/Downloads/1.jpg</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <zorder>hatter</zorder>
+   <zorder>label</zorder>
+   <zorder>beosztas_button</zorder>
+   <zorder>adatok_button</zorder>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="actionAdatok">
    <property name="text">
     <string>Adatok</string>

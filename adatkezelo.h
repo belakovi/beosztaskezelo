@@ -2,9 +2,8 @@
 #define ADATKEZELO_H
 
 #include <QDialog>
-#include <QStandardItemModel>
-#include <QTableView>
 #include <dbmanager.h>
+#include "dbmodel.h"
 
 namespace Ui {
 class Adatkezelo;
@@ -17,17 +16,16 @@ class Adatkezelo : public QDialog
 public:
     explicit Adatkezelo(QWidget *parent = nullptr);
     ~Adatkezelo();
+    bool checkSameNameInTable();
 
 
 private slots:
     void on_ButtonSave_clicked();
     void on_ButtonCancel_clicked();
-    bool checkSameNameInTable();
 
 private:
     Ui::Adatkezelo *ui;
-    QTableView *table;
-    QStandardItemModel *model;
+    DbModel *myModel;
     DbManager *adatbazis;
 };
 

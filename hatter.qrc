@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>hatter.jpg</file>
+        <file>../beosztaskezelo0/hatter.jpg</file>
+    </qresource>
+</RCC>

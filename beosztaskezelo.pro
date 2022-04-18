@@ -12,16 +12,20 @@ SOURCES += \
     adatkezelo.cpp \
     comboboxitemdelegate.cpp \
     dbmanager.cpp \
+    dbmodel.cpp \
     general.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    mymodel.cpp
 
 HEADERS += \
     adatkezelo.h \
     comboboxitemdelegate.h \
     dbmanager.h \
+    dbmodel.h \
     general.h \
-    mainwindow.h
+    mainwindow.h \
+    mymodel.h
 
 FORMS += \
     adatkezelo.ui \
@@ -32,3 +36,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    hatter.qrc

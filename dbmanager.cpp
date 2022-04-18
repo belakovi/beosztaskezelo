@@ -3,6 +3,7 @@
 #include <QSqlRecord>
 #include <QSqlError>
 #include <QStringList>
+#include <QDate>
 #include "dbmanager.h"
 
 DbManager::DbManager()
@@ -16,13 +17,6 @@ DbManager::DbManager()
        msgBox.setText("Error: connection with database failed");
        msgBox.exec();
    }
-
-   if (getRecordCount() == 0)
-   {
-       QMessageBox msgBox;
-       msgBox.setText("Az adatbazis ures");
-       msgBox.exec();
-   }
 }
 
 DbManager::~DbManager()
@@ -32,7 +26,7 @@ DbManager::~DbManager()
 
 int DbManager::getAllRecord()
 {
-    query = new QSqlQuery(QString("SELECT * FROM beosztas"));
+    query = new QSqlQuery(QString("SELECT * FROM dolgozok"));
     if (!query->exec())
     {
         QMessageBox msgBox;
@@ -50,9 +44,11 @@ QStringList DbManager::getNextRecord()
     QStringList oneRecord = {};
     if( query->next() )
     {
+        oneRecord << query->value(0).toString();
         oneRecord << query->value(1).toString();
         oneRecord << query->value(2).toString();
         oneRecord << query->value(3).toString();
+        oneRecord << query->value(4).toString();
     }
     else
     {
@@ -64,7 +60,7 @@ QStringList DbManager::getNextRecord()
 int DbManager::getRecordCount()
 {
     QSqlQuery query;
-    query.prepare("SELECT COUNT(*) FROM beosztas");
+    query.prepare("SELECT COUNT(*) FROM dolgozok");
     query.exec();
     query.next();
     return query.value(0).toInt();
@@ -72,7 +68,7 @@ int DbManager::getRecordCount()
 
 int DbManager::clearTable()
 {
-    QSqlQuery query(QString("DELETE FROM beosztas"));
+    QSqlQuery query(QString("DELETE FROM dolgozok"));
     if (!query.exec())
     {
         QMessageBox msgBox;
@@ -84,16 +80,17 @@ int DbManager::clearTable()
     return SUCCESS;
 }
 
-int DbManager::addRecord(int id, QStringList szemelyAdat)
+int DbManager::addRecord(DbRecord szemelyAdat)
 {
    QSqlQuery query;
 
-   query.prepare("INSERT INTO beosztas (id, nev, muszak, email) "
-                 "VALUES (:id, :name, :beosztas, :email)");
-   query.bindValue(":id", id);
-   query.bindValue(":name", szemelyAdat.at(0));
-   query.bindValue(":beosztas", szemelyAdat.at(1));
-   query.bindValue(":email", szemelyAdat.at(2));
+   query.prepare("INSERT INTO dolgozok (nev, reszleg, muszak, munka_kezdes, email) "
+                 "VALUES (:name, :reszleg, :muszak, :mdate, :email)");
+   query.bindValue(":name", szemelyAdat.nev);
+   query.bindValue(":reszleg", szemelyAdat.reszleg);
+   query.bindValue(":muszak", szemelyAdat.muszak);
+   query.bindValue(":mdate", szemelyAdat.date);
+   query.bindValue(":email", szemelyAdat.email);
    if(!query.exec())
    {
        QMessageBox msgBox;
@@ -103,4 +100,58 @@ int DbManager::addRecord(int id, QStringList szemelyAdat)
        return PROBLEM;
    }
    return SUCCESS;
+}
+
+int DbManager::createBeosztasTable(QString year)
+{
+    QString sqlCommand = QString("CREATE TABLE IF NOT EXISTS beosztas%1 (nev   STRING (40) PRIMARY KEY, "
+                                 "het STRING (60))").arg(year);
+    QSqlQuery query(sqlCommand);
+    if (!query.exec())
+    {
+        QMessageBox msgBox;
+        QString hiba("Adatbazis hiba (createBeosztasTable): %1");
+        msgBox.setText(hiba.arg(query.lastError().text()));
+        msgBox.exec();
+        return PROBLEM;
+    }
+    return SUCCESS;
+}
+
+void DbManager::addBeosztasRecord(QString dbNev, DbBeosztas &beosztas)
+{
+    QSqlQuery query;
+    QString sqlCommand = QString("INSERT INTO %1 (nev, het) VALUES (:nev, :beosztas)").arg(dbNev);
+    query.prepare(sqlCommand);
+    query.bindValue(":nev", beosztas.nev);
+    query.bindValue(":beosztas", beosztas.hetiBeosztas);
+    if(!query.exec())
+    {
+        QMessageBox msgBox;
+        QString hiba("Adatbazis hiba (addBeosztasRecord): %1");
+        msgBox.setText(hiba.arg(query.lastError().text()));
+        msgBox.exec();
+    }
+}
+
+int DbManager::collectBeosztasok(QString dbNev, QString nev, DbBeosztas &beosztas)
+{
+    QString sqlCommand = QString("SELECT * FROM %1 WHERE nev='%2'").arg(dbNev, nev);
+    QSqlQuery query;
+    query.prepare(sqlCommand);
+    if (!query.exec())
+    {
+        QMessageBox msgBox;
+        QString hiba("Adatbazis hiba (collectBeosztasok): %1");
+        msgBox.setText(hiba.arg(query.lastError().text()));
+        msgBox.exec();
+        return PROBLEM;
+    }
+    beosztas.nev = "";
+    if( query.next() )
+    {
+        beosztas.nev = query.value(0).toString();
+        beosztas.hetiBeosztas = query.value(1).toString();
+    }
+    return SUCCESS;
 }
