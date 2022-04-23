@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>820</width>
+    <height>605</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -17,12 +17,15 @@
    <string>MainWindow</string>
   </property>
   <property name="autoFillBackground">
-   <bool>true</bool>
+   <bool>false</bool>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
@@ -39,8 +42,12 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
     <property name="styleSheet">
-     <string notr="true"/>
+     <string notr="true">background-color: rgb(0, 0, 255);
+color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
      <string>Batthyány Kázmér Szakkórház
@@ -62,6 +69,9 @@ Kisbér</string>
       <width>111</width>
       <height>51</height>
      </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(0, 0, 255);
@@ -93,6 +103,24 @@ color: rgb(255, 255, 255);</string>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>820</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuMenu">
+    <property name="title">
+     <string>Menu</string>
+    </property>
+    <addaction name="actionAdatok_2"/>
+    <addaction name="actionBeosztas"/>
+   </widget>
+   <addaction name="menuMenu"/>
+  </widget>
   <action name="actionAdatok">
    <property name="text">
     <string>Adatok</string>
@@ -101,6 +129,16 @@ color: rgb(255, 255, 255);</string>
     <font>
      <pointsize>12</pointsize>
     </font>
+   </property>
+  </action>
+  <action name="actionAdatok_2">
+   <property name="text">
+    <string>Adatok</string>
+   </property>
+  </action>
+  <action name="actionBeosztas">
+   <property name="text">
+    <string>Beosztas</string>
    </property>
   </action>
  </widget>

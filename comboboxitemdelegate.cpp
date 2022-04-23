@@ -1,9 +1,9 @@
 #include "comboboxitemdelegate.h"
-#include <QComboBox>
 
-ComboBoxItemDelegate::ComboBoxItemDelegate(QObject *parent)
+ComboBoxItemDelegate::ComboBoxItemDelegate(QObject *parent, QStringList items)
     : QStyledItemDelegate(parent)
 {
+    comboTextItems = items;
 }
 
 ComboBoxItemDelegate::~ComboBoxItemDelegate()
@@ -14,9 +14,8 @@ QWidget *ComboBoxItemDelegate::createEditor(QWidget *parent, const QStyleOptionV
 {
     // Create the combobox and populate it
     QComboBox *cb = new QComboBox(parent);
-    const int row = index.row();
-    cb->addItem(QString("Nappali").arg(row));
-    cb->addItem(QString("Ejszakai").arg(row));
+    for (int i=0; i<comboTextItems.size(); i++)
+        cb->addItem(comboTextItems.at(i));
     return cb;
 }
 

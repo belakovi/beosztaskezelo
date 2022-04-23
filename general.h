@@ -4,12 +4,12 @@
 #include <QDialog>
 #include <QStandardItemModel>
 #include "dbmanager.h"
+#include "mymodel.h"
 
-typedef struct {
-    QString nev;
-    QString muszak;
-    QString email;
-} DbRecord;
+const QStringList honapok = {"Január", "Február", "Március", "Április", "Május", "Június",
+                             "Július", "Augusztus", "Szeptember", "Október", "November", "December"};
+const QStringList muszakok = {"Nappali", "Éjszakai"};
+const QStringList reszlegek = {"Ápoló", "Karbantartó", "Orvos", "Portás", "Takarító"};
 
 namespace Ui {
 class General;
@@ -22,12 +22,36 @@ class General : public QDialog
 public:
     explicit General(QWidget *parent = nullptr);
     ~General();
+    int getWeekNumbers(int year, int month);
+    void setDatesInCell(QDate currentDay);
+    void updateBeosztas();
+    void updateTableSettings(QString ev, QString honap);
+    void createBeosztas(DbRecord &dolgozok, DbBeosztas &oneRecord);
+
+    void createReszlegPdf(QString reszleg);
+    void createDolgozoPdf(QString reszleg);
+
+
+private slots:
+    void on_Honap_currentTextChanged(const QString &arg1);
+
+    void on_Ev_currentTextChanged(const QString &arg1);
+
+    void on_reszleg_currentTextChanged(const QString &arg1);
+
+    void on_muszakCombo_currentTextChanged(const QString &arg1);
+
+    void on_pdfButton_clicked();
+
+    void on_ValtoztatButton_clicked();
 
 private:
     Ui::General *ui;
     QStandardItemModel *model;
     DbManager *adatbazis;
-    list<DbRecord> *dbRecords;
+    list<DbRecord> dbRecords;
+    QString actMuszak = "", actReszleg = "";
+    MyModel *myModel;
 };
 
 #endif // GENERAL_H
