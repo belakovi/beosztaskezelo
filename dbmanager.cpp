@@ -10,8 +10,8 @@
 DbManager::DbManager()
 {
    db = QSqlDatabase::addDatabase("QSQLITE");
-   //db.setDatabaseName("../beosztaskezelo/adatbazis.db");
-   QString pathAndName = QCoreApplication::applicationDirPath() + "/adatbazis.db";
+   QString pathAndName = "../beosztaskezelo/adatbazis.db";
+   //QString pathAndName = QCoreApplication::applicationDirPath() + "/adatbazis.db";
    db.setDatabaseName(pathAndName);
 
    if (!db.open())
@@ -27,36 +27,39 @@ DbManager::~DbManager()
     db.close();
 }
 
-int DbManager::getAllRecord()
-{
-    query = new QSqlQuery(QString("SELECT * FROM dolgozok"));
-    if (!query->exec())
-    {
-        QMessageBox msgBox;
-        QString hiba("Adatbazis hiba (getAllRecord): %1");
-        msgBox.setText(hiba.arg(query->lastError().text()));
-        msgBox.exec();
-        delete query;
-        return PROBLEM;
-    }
-    return SUCCESS;
-}
-
-QStringList DbManager::getNextRecord()
+QStringList DbManager::getAllDolgozo(bool first)
 {
     QStringList oneRecord = {};
-    if( query->next() )
+
+    if (first)
     {
-        oneRecord << query->value(0).toString();
-        oneRecord << query->value(1).toString();
-        oneRecord << query->value(2).toString();
-        oneRecord << query->value(3).toString();
-        oneRecord << query->value(4).toString();
+        query = new QSqlQuery(QString("SELECT * FROM dolgozok"));
+        if (!query->exec())
+        {
+            QMessageBox msgBox;
+            QString hiba("Adatbazis hiba (getAllDolgozo): %1");
+            msgBox.setText(hiba.arg(query->lastError().text()));
+            msgBox.exec();
+            delete query;
+        }
+        else
+            oneRecord << "OK";
     }
     else
     {
-        delete query;
+        if( query->next() )
+        {
+            oneRecord << query->value(0).toString();
+            oneRecord << query->value(1).toString();
+            oneRecord << query->value(2).toString();
+            oneRecord << query->value(3).toString();
+        }
+        else
+        {
+            delete query;
+        }
     }
+
     return oneRecord;
 }
 
@@ -83,16 +86,15 @@ int DbManager::clearTable()
     return SUCCESS;
 }
 
-int DbManager::addRecord(DbRecord szemelyAdat)
+int DbManager::addDolgozo(DbRecord szemelyAdat)
 {
    QSqlQuery query;
 
-   query.prepare("INSERT INTO dolgozok (nev, reszleg, muszak, munka_kezdes, email) "
-                 "VALUES (:name, :reszleg, :muszak, :mdate, :email)");
+   query.prepare("INSERT INTO dolgozok (id, nev, reszleg, email) "
+                 "VALUES (:id, :name, :reszleg, :email)");
+   query.bindValue(":id", szemelyAdat.id);
    query.bindValue(":name", szemelyAdat.nev);
    query.bindValue(":reszleg", szemelyAdat.reszleg);
-   query.bindValue(":muszak", szemelyAdat.muszak);
-   query.bindValue(":mdate", szemelyAdat.date);
    query.bindValue(":email", szemelyAdat.email);
    if(!query.exec())
    {
@@ -107,7 +109,7 @@ int DbManager::addRecord(DbRecord szemelyAdat)
 
 int DbManager::createBeosztasTable(QString year)
 {
-    QString sqlCommand = QString("CREATE TABLE IF NOT EXISTS beosztas%1 (nev   STRING (40) PRIMARY KEY, "
+/*    QString sqlCommand = QString("CREATE TABLE IF NOT EXISTS beosztas%1 (nev   STRING (40) PRIMARY KEY, "
                                  "het STRING (60))").arg(year);
     QSqlQuery query(sqlCommand);
     if (!query.exec())
@@ -117,13 +119,13 @@ int DbManager::createBeosztasTable(QString year)
         msgBox.setText(hiba.arg(query.lastError().text()));
         msgBox.exec();
         return PROBLEM;
-    }
+    }*/
     return SUCCESS;
 }
 
 void DbManager::addBeosztasRecord(QString dbNev, DbBeosztas &beosztas)
 {
-    QSqlQuery query;
+/*    QSqlQuery query;
     QString sqlCommand = QString("INSERT INTO %1 (nev, het) VALUES (:nev, :beosztas)").arg(dbNev);
     query.prepare(sqlCommand);
     query.bindValue(":nev", beosztas.nev);
@@ -134,12 +136,12 @@ void DbManager::addBeosztasRecord(QString dbNev, DbBeosztas &beosztas)
         QString hiba("Adatbazis hiba (addBeosztasRecord): %1");
         msgBox.setText(hiba.arg(query.lastError().text()));
         msgBox.exec();
-    }
+    }*/
 }
 
 int DbManager::collectBeosztasok(QString dbNev, QString nev, DbBeosztas &beosztas)
 {
-    QString sqlCommand = QString("SELECT * FROM %1 WHERE nev='%2'").arg(dbNev, nev);
+/*    QString sqlCommand = QString("SELECT * FROM %1 WHERE nev='%2'").arg(dbNev, nev);
     QSqlQuery query;
     query.prepare(sqlCommand);
     if (!query.exec())
@@ -155,6 +157,6 @@ int DbManager::collectBeosztasok(QString dbNev, QString nev, DbBeosztas &beoszta
     {
         beosztas.nev = query.value(0).toString();
         beosztas.hetiBeosztas = query.value(1).toString();
-    }
+    }*/
     return SUCCESS;
 }

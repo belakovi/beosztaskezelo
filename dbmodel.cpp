@@ -36,11 +36,10 @@ QVariant DbModel::headerData(int section, Qt::Orientation orientation, int role)
 void DbModel::addTableData(QStringList dbData)
 {
     DbRecord data;
-    data.nev       = dbData.at(0);
-    data.reszleg   = dbData.at(1);
-    data.muszak    = dbData.at(2);
-    data.date      = dbData.at(3);
-    data.email     = dbData.at(4);
+    data.id      = dbData.at(0).toInt();
+    data.nev     = dbData.at(1);
+    data.reszleg = dbData.at(2);
+    data.email   = dbData.at(3);
     rowData.push_back(data);
 }
 
@@ -70,23 +69,21 @@ void DbModel::addOneRowToTable()
 
 QVariant DbModel::data(const QModelIndex &index, int role) const
 {
-    switch (role) {
+    switch (role)
+    {
     case Qt::DisplayRole:
         int row = index.row();
         if (row>=(int)rowData.size())
             return QVariant();
         auto it =  rowData.begin();
         advance(it, row);
-        switch (index.column()) {
+        switch (index.column())
+        {
         case 0:
             return it->nev;
         case 1:
             return it->reszleg;
         case 2:
-            return it->muszak;
-        case 3:
-            return it->date;
-        case 4:
             return it->email;
         }
     }
@@ -115,7 +112,6 @@ QString DbModel::checkSameName()
     return 0;
 }
 
-
 DbRecord DbModel::getOneRowData(int rowIndex)
 {
     if (  rowIndex<(int)rowData.size() )
@@ -134,6 +130,26 @@ Qt::ItemFlags DbModel::flags(const QModelIndex &index) const
     return  Qt::ItemIsSelectable|Qt::ItemIsEnabled|Qt::ItemIsEditable | QAbstractTableModel::flags(index);
 }
 
+int DbModel::getEmptyID()
+{
+    list<DbRecord>::iterator it;
+
+    if (rowData.size() < INT_MAX)
+        return rowData.size();
+    //search for empty place
+    for (int i=0; i<INT_MAX; i++)
+    {
+        for (it=rowData.begin(); it != rowData.end(); ++it)
+        {
+            if (it->id==i)
+                break;
+        }
+        if(it != rowData.end())
+            return i;
+    }
+    return INT_MAX;
+}
+
 bool DbModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (role == Qt::EditRole) {
@@ -150,20 +166,13 @@ bool DbModel::setData(const QModelIndex &index, const QVariant &value, int role)
         switch (index.column()) {
         case 0:
             oneRowData.nev = value.toString();
-            //add default date to current date
-            oneRowData.date = QDate::currentDate().toString("yyyy-MM-dd");
+            //add unique id to the name, later check if no more empty spot then error
+            oneRowData.id = getEmptyID();
             break;
         case 1:
             oneRowData.reszleg = value.toString();
             break;
         case 2:
-            oneRowData.muszak = value.toString();
-            break;
-        case 3:
-            if (value.toString()!="")
-                oneRowData.date = value.toString();
-            break;
-        case 4:
             oneRowData.email = value.toString();
             break;
 

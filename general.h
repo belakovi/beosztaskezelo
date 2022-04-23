@@ -43,6 +43,8 @@ private slots:
 
     void on_pdfButton_clicked();
 
+    void on_ValtoztatButton_clicked();
+
 private:
     Ui::General *ui;
     QStandardItemModel *model;

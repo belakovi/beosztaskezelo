@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1282</width>
-    <height>598</height>
+    <height>655</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>100</y>
+     <y>160</y>
      <width>1211</width>
      <height>471</height>
     </rect>
@@ -36,10 +36,10 @@
   <widget class="QComboBox" name="Honap">
    <property name="geometry">
     <rect>
-     <x>90</x>
+     <x>160</x>
      <y>40</y>
      <width>101</width>
-     <height>24</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="font">
@@ -57,10 +57,10 @@
   <widget class="QComboBox" name="Ev">
    <property name="geometry">
     <rect>
-     <x>210</x>
+     <x>60</x>
      <y>40</y>
      <width>75</width>
-     <height>24</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="font">
@@ -75,10 +75,10 @@
   <widget class="QComboBox" name="reszleg">
    <property name="geometry">
     <rect>
-     <x>360</x>
-     <y>40</y>
+     <x>60</x>
+     <y>100</y>
      <width>131</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="font">
@@ -93,34 +93,34 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>360</x>
-     <y>20</y>
+     <x>60</x>
+     <y>80</y>
      <width>51</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>Részleg:</string>
+    <string>Részleg</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>550</x>
-     <y>20</y>
+     <x>220</x>
+     <y>80</y>
      <width>41</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>Muszak:</string>
+    <string>Muszak</string>
    </property>
   </widget>
   <widget class="QComboBox" name="muszakCombo">
    <property name="geometry">
     <rect>
-     <x>550</x>
-     <y>40</y>
+     <x>220</x>
+     <y>100</y>
      <width>91</width>
      <height>22</height>
     </rect>
@@ -137,21 +137,21 @@
   <widget class="QPushButton" name="pdfButton">
    <property name="geometry">
     <rect>
-     <x>710</x>
-     <y>40</y>
+     <x>1000</x>
+     <y>100</y>
      <width>80</width>
-     <height>31</height>
+     <height>51</height>
     </rect>
    </property>
    <property name="text">
-    <string>PDF</string>
+    <string>PDF írás</string>
    </property>
   </widget>
   <widget class="QTextEdit" name="pdfNev">
    <property name="geometry">
     <rect>
-     <x>800</x>
-     <y>40</y>
+     <x>920</x>
+     <y>60</y>
      <width>251</width>
      <height>31</height>
     </rect>
@@ -160,8 +160,8 @@
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>820</x>
-     <y>10</y>
+     <x>930</x>
+     <y>30</y>
      <width>211</width>
      <height>21</height>
     </rect>
@@ -172,6 +172,178 @@
    <property name="alignment">
     <set>Qt::AlignCenter</set>
    </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>20</y>
+     <width>51</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Év</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>20</y>
+     <width>51</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Hónap</string>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>0</y>
+     <width>441</width>
+     <height>141</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Beosztás változás</string>
+   </property>
+   <widget class="QComboBox" name="dolgozo">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>311</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="muszakValt">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>70</y>
+      <width>91</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="HonapValt">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>100</y>
+      <width>101</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="currentIndex">
+     <number>-1</number>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="NapValt">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>100</y>
+      <width>51</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="currentIndex">
+     <number>-1</number>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="HonapValt2">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>100</y>
+      <width>101</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="currentIndex">
+     <number>-1</number>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="NapValt2">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>100</y>
+      <width>51</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="currentIndex">
+     <number>-1</number>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="ValtoztatButton">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>30</y>
+      <width>80</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Változtat</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

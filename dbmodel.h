@@ -10,16 +10,15 @@ using namespace std;
 #define MAXNAP 7
 
 typedef struct {
+    int     id;
     QString nev;
     QString reszleg;
-    QString muszak;
-    QString date;
     QString email;
 } DbRecord;
 
 typedef struct {
-    QString nev;
-    QString hetiBeosztas;
+    int  id;
+    char ev[366];
 } DbBeosztas;
 
 class DbModel : public QAbstractTableModel
@@ -40,11 +39,12 @@ public:
     DbRecord getOneRowData(int rowIndex);
     QString checkSameName();
     void addOneRowToTable();
+    int getEmptyID();
 
 private:
     int numberOfRow = 0;
     list<DbRecord> rowData;
-    const QStringList columnHeader = {"Név", "Részleg", "Muszak", "Munkakezdés", "Email"};
+    const QStringList columnHeader = {"Név", "Részleg", "Email"};
 
 signals:
     void editCompleted(const QString &);

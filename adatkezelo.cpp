@@ -16,10 +16,10 @@ Adatkezelo::Adatkezelo(QWidget *parent) :
     myModel = new DbModel();
     ui->setupUi(this);
     ui->tableView->setStyleSheet("QHeaderView::section { background-color:gray }");
-
+/*
     ComboBoxItemDelegate* cbMuszak = new ComboBoxItemDelegate(ui->tableView, muszakok);
     ui->tableView->setItemDelegateForColumn(2, cbMuszak);
-
+*/
     ComboBoxItemDelegate* cbReszleg = new ComboBoxItemDelegate(ui->tableView, reszlegek);
     ui->tableView->setItemDelegateForColumn(1, cbReszleg);
 
@@ -27,14 +27,12 @@ Adatkezelo::Adatkezelo(QWidget *parent) :
     int rowCount = adatbazis->getRecordCount();
     myModel->setRowCount(rowCount+100);
     QStringList oneRow;
-    if (!adatbazis->getAllRecord())
+    oneRow=adatbazis->getAllDolgozo(true);
+    while(!oneRow.empty())
     {
-        for (int cnt=0; cnt<rowCount; cnt++)
-        {
-            oneRow = adatbazis->getNextRecord();
+        oneRow = adatbazis->getAllDolgozo(false);
+        if (!oneRow.empty())
             myModel->addTableData(oneRow);
-            oneRow.clear();
-        }
     }
     ui->tableView->setModel(myModel);
 }
@@ -69,7 +67,7 @@ void Adatkezelo::on_ButtonSave_clicked()
         DbRecord oneRowData = myModel->getOneRowData(index++);
         while (oneRowData.nev != "")
         {
-            adatbazis->addRecord(oneRowData);
+            adatbazis->addDolgozo(oneRowData);
             oneRowData = myModel->getOneRowData(index++);
         }
     }

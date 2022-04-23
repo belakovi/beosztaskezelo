@@ -17,20 +17,19 @@ General::General(QWidget *parent) :
     ui(new Ui::General)
 {    
     adatbazis = new DbManager();
-    //get all records from DB
-    if (!adatbazis->getAllRecord())
+    QStringList oneRow;
+    oneRow=adatbazis->getAllDolgozo(true);
+    DbRecord dbRecord;
+    while(!oneRow.empty())
     {
-        DbRecord dbRecord;
-        QStringList oneRow = adatbazis->getNextRecord();
-        while (!oneRow.isEmpty())
+        oneRow = adatbazis->getAllDolgozo(false);
+        if(!oneRow.empty())
         {
-            dbRecord.nev = oneRow.at(0);
-            dbRecord.reszleg = oneRow.at(1);
-            dbRecord.muszak = oneRow.at(2);
-            dbRecord.date = oneRow.at(3);
-            dbRecord.email = oneRow.at(4);
+            dbRecord.id  = oneRow.at(0).toInt();
+            dbRecord.nev = oneRow.at(1);
+            dbRecord.reszleg = oneRow.at(2);
+            dbRecord.email = oneRow.at(3);
             dbRecords.push_back(dbRecord);
-            oneRow = adatbazis->getNextRecord();
         }
     }
 
@@ -49,6 +48,12 @@ General::General(QWidget *parent) :
     ui->reszleg->setCurrentIndex(0);
     ui->naptar->setModel(myModel);
     ui->naptar->show();
+
+    for (list<DbRecord>::iterator it=dbRecords.begin(); it!=dbRecords.end(); ++it)
+    {
+        if (it->reszleg == ui->reszleg->currentText())
+            ui->dolgozo->addItem(it->nev);
+    }
 }
 
 General::~General()
@@ -127,7 +132,7 @@ void General::setDatesInCell(QDate currentDay)
 
 void General::createBeosztas(DbRecord &dolgozok, DbBeosztas &oneRecord)
 {
-    oneRecord.nev = dolgozok.nev;
+/*    oneRecord.nev = dolgozok.nev;
     QDate startDate = QDate::fromString(dolgozok.date,"yyyy-MM-dd");
     int startWeek = startDate.weekNumber();
     oneRecord.hetiBeosztas.fill(' ', 54);
@@ -135,12 +140,12 @@ void General::createBeosztas(DbRecord &dolgozok, DbBeosztas &oneRecord)
     for (int week=startWeek+1; week<53; week++)
     {
         oneRecord.hetiBeosztas[week] = OPPOSITE_BEOSZTAS(oneRecord.hetiBeosztas[week-1]);
-    }
+    }*/
 }
 
 void General::updateBeosztas()
 {
-    if (actReszleg=="" || actMuszak=="")
+/*    if (actReszleg=="" || actMuszak=="")
         return;
 
     myModel->clearCellsText();
@@ -193,7 +198,7 @@ void General::updateBeosztas()
             }
         }
     }
-    myModel->updateFinished();
+    myModel->updateFinished();*/
 }
 
 void General::on_Honap_currentTextChanged(const QString &arg1)
@@ -212,6 +217,12 @@ void General::on_Ev_currentTextChanged(const QString &arg1)
 void General::on_reszleg_currentTextChanged(const QString &arg1)
 {
     actReszleg = arg1;
+    ui->dolgozo->clear();
+    for (list<DbRecord>::iterator it=dbRecords.begin(); it!=dbRecords.end(); ++it)
+    {
+        if (it->reszleg == ui->reszleg->currentText())
+            ui->dolgozo->addItem(it->nev);
+    }
     updateBeosztas();
 }
 
@@ -261,3 +272,9 @@ void General::createDolgozoPdf(QString dolgozo)
 {
 
 }
+
+void General::on_ValtoztatButton_clicked()
+{
+
+}
+
