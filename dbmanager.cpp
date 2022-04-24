@@ -27,6 +27,38 @@ DbManager::~DbManager()
     db.close();
 }
 
+int DbManager::inquiryFreeDays(QString year)
+{
+    query = new QSqlQuery(QString("SELECT * FROM szabadnapok WHERE YEAR=%1").arg(year));
+    if (!query->exec())
+    {
+        QMessageBox msgBox;
+        QString hiba("Adatbazis hiba (getAllDolgozo): %1");
+        msgBox.setText(hiba.arg(query->lastError().text()));
+        msgBox.exec();
+        delete query;
+        return PROBLEM;
+    }
+    return SUCCESS;
+}
+
+QStringList DbManager::getFreeDays()
+{
+    QStringList oneRecord = {};
+    if( query->next() )
+    {
+        oneRecord << query->value(0).toString();
+        oneRecord << query->value(1).toString();
+        oneRecord << query->value(2).toString();
+        oneRecord << query->value(3).toString();
+    }
+    else
+    {
+        delete query;
+    }
+    return oneRecord;
+}
+
 QStringList DbManager::getAllDolgozo(bool first)
 {
     QStringList oneRecord = {};

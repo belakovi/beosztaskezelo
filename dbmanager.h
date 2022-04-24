@@ -8,11 +8,14 @@ using namespace std;
 
 #define SUCCESS 0
 #define PROBLEM 1
+
 #define NOT_USED 'F'
 #define NAPPALI  'N'
 #define EJSZAKAI 'E'
 #define PIHENO   'P'
 #define TAVOLLET 'T'
+#define NORMAL   'A'
+
 #define MAX_NAPOK  366
 #define OOO "Távollét" //OOO -> Out Of Office
 
@@ -39,6 +42,8 @@ public:
     QString getDolgozoBeosztas(QString dbNev, int id);
     void addBeosztasRecord(QString dbNev, DbBeosztas &beosztas);
     void updateBeosztasRecord(QString dbNev, DbBeosztas &beosztas);
+    int inquiryFreeDays(QString year);
+    QStringList getFreeDays();
 
 private:
     QSqlDatabase db;

@@ -60,6 +60,22 @@ General::General(QWidget *parent) :
     ui->NapValt->setCurrentIndex(QDate::currentDate().day()-1);
     ui->NapValt2->setCurrentIndex(QDate::currentDate().day()-1);
 
+    if (adatbazis->inquiryFreeDays(ui->Ev->currentText())==SUCCESS)
+    {
+        QStringList szabadnapoRecord;
+        exceptionDays_t oneRecord;
+        szabadnapoRecord=adatbazis->getFreeDays();
+        while (!szabadnapoRecord.isEmpty())
+        {
+            oneRecord.year = szabadnapoRecord[0];
+            oneRecord.month = szabadnapoRecord[1];
+            oneRecord.day   = szabadnapoRecord[2];
+            oneRecord.type  = szabadnapoRecord[3];
+            exceptionDays.push_back(oneRecord);
+            szabadnapoRecord=adatbazis->getFreeDays();
+        }
+    }
+
     for (int i=0; i<31; i++)
         nevPerNap.push_back("");
     updateBeosztas();
@@ -187,24 +203,49 @@ void General::generateApolok(int startDay, int endDay)
     }
 }
 
-void General::generateKarbantarto()
+void General::generateNormal(int startDay, int endDay)
 {
+    for (list<beosztas_t>::iterator it=beosztas.begin(); it!=beosztas.end(); ++it)
+    {
+        if (it->beosztas.ev.at(startDay)==NOT_USED)
+        {
+            QDate currentDay;
+            currentDay.setDate(ui->Ev->currentText().toInt(), ui->Honap->currentIndex()+1, 1);
+            int weekDay = currentDay.dayOfWeek();
 
-}
+            for (int i=startDay; i<=MAX_NAPOK; i++)
+            {
+                if (weekDay>5)
+                { //weekend is free
+                    it->beosztas.ev.replace(i, 1, PIHENO);
+                }
+                else
+                    it->beosztas.ev.replace(i, 1, NORMAL);
+                weekDay = weekDay%7+1;
+            }
+            QDate firstDay;
+            firstDay.setDate(ui->Ev->currentText().toInt(), 1, 1);
+            int startDay;
 
-void General::generateOrvos()
-{
+            for (list<exceptionDays_t>::iterator ite=exceptionDays.begin(); ite!=exceptionDays.end(); ++ite)
+            { //update all working days according to predefined data
+                currentDay.setDate(ite->year.toInt(), ite->month.toInt(), ite->day.toInt());
+                startDay = firstDay.daysTo(currentDay);
+                if (ite->type == "F")
+                    it->beosztas.ev.replace(startDay, 1, PIHENO);
+                else
+                    it->beosztas.ev.replace(startDay, 1, NORMAL);
+            }
+        }
 
-}
-
-void General::generatePortas()
-{
-
-}
-
-void General::generateTakarito()
-{
-
+        for (int i=0; i<=endDay; i++)
+        {
+            if (it->beosztas.ev.at(startDay+i).unicode()==NORMAL)
+            {
+                nevPerNap[i] += it->nev +"\n";
+            }
+        }
+    }
 }
 
 void General::updateBeosztas()
@@ -224,22 +265,15 @@ void General::updateBeosztas()
 
     switch (reszlegek.indexOf(ui->reszleg->currentText()))
     {
-    case 0:
+    case 0: //"Ápoló"
+    case 3: //"Portás"
         generateApolok(startDay, currentDay.daysInMonth());
         break;
-    case 1:
-        generateKarbantarto();
+    case 1: //"Karbantartó"
+    case 2: //"Orvos"
+    case 4: //"Takarító"
+        generateNormal(startDay, currentDay.daysInMonth());
         break;
-    case 2:
-        generateOrvos();
-        break;
-    case 3:
-        generatePortas();
-        break;
-    case 4:
-        generateTakarito();
-        break;
-
     }
 
     int maxRow = myModel->rowCount();

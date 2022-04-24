@@ -6,6 +6,13 @@
 #include "dbmanager.h"
 #include "mymodel.h"
 
+typedef struct {
+    QString year;
+    QString month;
+    QString day;
+    QString type;
+} exceptionDays_t;
+
 
 namespace Ui {
 class General;
@@ -14,7 +21,6 @@ class General;
 class General : public QDialog
 {
     Q_OBJECT
-
 
 public:
     explicit General(QWidget *parent = nullptr);
@@ -26,10 +32,7 @@ public:
     void loadBeosztas();
 
     void generateApolok(int startDay, int endDay);
-    void generateKarbantarto();
-    void generateOrvos();
-    void generatePortas();
-    void generateTakarito();
+    void generateNormal(int startDay, int endDay);
 
     void createReszlegPdf(QString reszleg);
     void createDolgozoPdf(QString reszleg);
@@ -59,6 +62,7 @@ private:
     list<beosztas_t> beosztas;
     QStringList nevPerNap;
     MyModel *myModel;
+    list<exceptionDays_t> exceptionDays;
 };
 
 #endif // GENERAL_H
