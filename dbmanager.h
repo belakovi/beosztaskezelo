@@ -21,7 +21,7 @@ public:
     int getRecordCount();
     QStringList getAllDolgozo(bool first);
     int createBeosztasTable(QString year);
-    int collectBeosztasok(QString dbNev, QString nev, DbBeosztas &beosztas);
+    QString getDolgozoBeosztas(QString dbNev, int id);
     void addBeosztasRecord(QString dbNev, DbBeosztas &beosztas);
 
 private:

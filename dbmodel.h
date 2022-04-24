@@ -9,17 +9,25 @@ using namespace std;
 #define MAXHET 6
 #define MAXNAP 7
 
-typedef struct {
+typedef struct
+{
     int     id;
     QString nev;
     QString reszleg;
     QString email;
 } DbRecord;
 
-typedef struct {
-    int  id;
-    char ev[366];
+typedef struct
+{
+    int     id;
+    QString ev;
 } DbBeosztas;
+
+typedef struct
+{
+    QString    nev;
+    DbBeosztas beosztas;
+} beosztas_t;
 
 class DbModel : public QAbstractTableModel
 {

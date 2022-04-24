@@ -53,7 +53,8 @@ void MyModel::clearCellsText()
     {
         for (int col=0; col<MAXNAP; col++)
         {
-            cellData[row][col].text = "";
+            cellData[row][col].text.clear();
+            //cellData[row][col].day = 0;
         }
     }
 }
@@ -64,7 +65,8 @@ void MyModel::clearTable()
     numberOfRow = 0;
     numberOfColumn = 0;
     rowHeader.clear();
-    memset (cellData, 0, sizeof (cellData));
+    clearCellsText();
+    //memset (cellData, 0, sizeof (cellData));
     endResetModel();
 }
 
@@ -76,6 +78,11 @@ void MyModel::setCellDay(int row, int col, int data)
 void MyModel::setCellText(int row, int col, QString data)
 {
     cellData[row][col].text = data;
+}
+
+int MyModel::getCellDay(int row, int col)
+{
+    return cellData[row][col].day;
 }
 
 void MyModel::updateFinished(){

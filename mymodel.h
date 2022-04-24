@@ -25,6 +25,7 @@ public:
     void addRowHeader(QString cHeader);
     void setCellDay(int row, int col, int data);
     void setCellText(int row, int col, QString data);
+    int getCellDay(int row, int col);
     void clearTable(void);
     void clearCellsText();
     void updateFinished();

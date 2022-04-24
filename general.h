@@ -19,6 +19,13 @@ class General : public QDialog
 {
     Q_OBJECT
 
+#define NOT_USED 'F'
+#define NAPPALI  'N'
+#define EJSZAKAI 'E'
+#define PIHENO   'P'
+#define NEM_DOLGOZO 'O'
+#define MAX_NAPOK  366
+
 public:
     explicit General(QWidget *parent = nullptr);
     ~General();
@@ -26,7 +33,14 @@ public:
     void setDatesInCell(QDate currentDay);
     void updateBeosztas();
     void updateTableSettings(QString ev, QString honap);
+    void loadBeosztas();
     void createBeosztas(DbRecord &dolgozok, DbBeosztas &oneRecord);
+
+    void generateApolok(int startDay, int endDay);
+    void generateKarbantarto();
+    void generateOrvos();
+    void generatePortas();
+    void generateTakarito();
 
     void createReszlegPdf(QString reszleg);
     void createDolgozoPdf(QString reszleg);
@@ -49,8 +63,10 @@ private:
     Ui::General *ui;
     QStandardItemModel *model;
     DbManager *adatbazis;
-    list<DbRecord> dbRecords;
-    QString actMuszak = "", actReszleg = "";
+    QString beosztasTablaNev = "";
+    list<DbRecord> dolgozok;
+    list<beosztas_t> beosztas;
+    QStringList nevPerNap;
     MyModel *myModel;
 };
 

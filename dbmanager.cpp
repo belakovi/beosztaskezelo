@@ -139,9 +139,9 @@ void DbManager::addBeosztasRecord(QString dbNev, DbBeosztas &beosztas)
     }*/
 }
 
-int DbManager::collectBeosztasok(QString dbNev, QString nev, DbBeosztas &beosztas)
+QString DbManager::getDolgozoBeosztas(QString dbNev, int id)
 {
-/*    QString sqlCommand = QString("SELECT * FROM %1 WHERE nev='%2'").arg(dbNev, nev);
+    QString sqlCommand = QString("SELECT napok FROM %1 WHERE id='%1'").arg(dbNev, id);
     QSqlQuery query;
     query.prepare(sqlCommand);
     if (!query.exec())
@@ -150,13 +150,12 @@ int DbManager::collectBeosztasok(QString dbNev, QString nev, DbBeosztas &beoszta
         QString hiba("Adatbazis hiba (collectBeosztasok): %1");
         msgBox.setText(hiba.arg(query.lastError().text()));
         msgBox.exec();
-        return PROBLEM;
+        return "";
     }
-    beosztas.nev = "";
+
     if( query.next() )
     {
-        beosztas.nev = query.value(0).toString();
-        beosztas.hetiBeosztas = query.value(1).toString();
-    }*/
-    return SUCCESS;
+        return query.value(0).toString();
+    }
+    return "";
 }
