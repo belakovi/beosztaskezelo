@@ -109,8 +109,8 @@ int DbManager::addDolgozo(DbRecord szemelyAdat)
 
 int DbManager::createBeosztasTable(QString year)
 {
-/*    QString sqlCommand = QString("CREATE TABLE IF NOT EXISTS beosztas%1 (nev   STRING (40) PRIMARY KEY, "
-                                 "het STRING (60))").arg(year);
+    QString sqlCommand = QString("CREATE TABLE IF NOT EXISTS beosztas%1 (id    INTEGER      PRIMARY KEY, "
+                                 "napok STRING (366))").arg(year);
     QSqlQuery query(sqlCommand);
     if (!query.exec())
     {
@@ -119,29 +119,44 @@ int DbManager::createBeosztasTable(QString year)
         msgBox.setText(hiba.arg(query.lastError().text()));
         msgBox.exec();
         return PROBLEM;
-    }*/
+    }
     return SUCCESS;
 }
 
 void DbManager::addBeosztasRecord(QString dbNev, DbBeosztas &beosztas)
 {
-/*    QSqlQuery query;
-    QString sqlCommand = QString("INSERT INTO %1 (nev, het) VALUES (:nev, :beosztas)").arg(dbNev);
+    QSqlQuery query;
+    QString sqlCommand = QString("INSERT or REPLACE INTO %1 (id, napok) VALUES (:id, :napok)").arg(dbNev);
     query.prepare(sqlCommand);
-    query.bindValue(":nev", beosztas.nev);
-    query.bindValue(":beosztas", beosztas.hetiBeosztas);
+    query.bindValue(":id", beosztas.id);
+    query.bindValue(":napok", beosztas.ev);
     if(!query.exec())
     {
         QMessageBox msgBox;
         QString hiba("Adatbazis hiba (addBeosztasRecord): %1");
         msgBox.setText(hiba.arg(query.lastError().text()));
         msgBox.exec();
-    }*/
+    }
+}
+
+void DbManager::updateBeosztasRecord(QString dbNev, DbBeosztas &beosztas)
+{
+    QString sqlCommand = QString("UPDATE %1 SET napok = %2 WHERE id = %3").arg(dbNev, beosztas.ev, QString::number(beosztas.id));
+
+    QSqlQuery query;
+    query.prepare(sqlCommand);
+    if(!query.exec())
+    {
+        QMessageBox msgBox;
+        QString hiba("Adatbazis hiba (updateBeosztasRecord): %1");
+        msgBox.setText(hiba.arg(query.lastError().text()));
+        msgBox.exec();
+    }
 }
 
 QString DbManager::getDolgozoBeosztas(QString dbNev, int id)
 {
-    QString sqlCommand = QString("SELECT napok FROM %1 WHERE id='%1'").arg(dbNev, id);
+    QString sqlCommand = QString("SELECT napok FROM %1 WHERE id='%2'").arg(dbNev, QString::number(id));
     QSqlQuery query;
     query.prepare(sqlCommand);
     if (!query.exec())

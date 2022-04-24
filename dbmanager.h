@@ -23,6 +23,7 @@ public:
     int createBeosztasTable(QString year);
     QString getDolgozoBeosztas(QString dbNev, int id);
     void addBeosztasRecord(QString dbNev, DbBeosztas &beosztas);
+    void updateBeosztasRecord(QString dbNev, DbBeosztas &beosztas);
 
 private:
     QSqlDatabase db;

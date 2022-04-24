@@ -59,6 +59,8 @@ private slots:
 
     void on_ValtoztatButton_clicked();
 
+    void on_MentButton_clicked();
+
 private:
     Ui::General *ui;
     QStandardItemModel *model;

@@ -282,7 +282,7 @@ void General::on_reszleg_currentTextChanged(const QString &arg1)
     ui->dolgozo->clear();
     for (list<DbRecord>::iterator it=dolgozok.begin(); it!=dolgozok.end(); ++it)
     {
-        if (it->reszleg == ui->reszleg->currentText())
+        if (it->reszleg == arg1)
             ui->dolgozo->addItem(it->nev);
     }
     updateTableSettings(ui->Ev->currentText(), ui->Honap->currentText());
@@ -340,5 +340,20 @@ void General::createDolgozoPdf(QString dolgozo)
 void General::on_ValtoztatButton_clicked()
 {
 
+}
+
+
+void General::on_MentButton_clicked()
+{
+    QString rec;
+
+    for (list<beosztas_t>::iterator it=beosztas.begin(); it!=beosztas.end(); ++it)
+    {
+        rec = adatbazis->getDolgozoBeosztas(beosztasTablaNev, it->beosztas.id);
+        if (rec.isEmpty())
+            adatbazis->addBeosztasRecord(beosztasTablaNev, it->beosztas);
+        else
+            adatbazis->updateBeosztasRecord(beosztasTablaNev, it->beosztas);
+    }
 }
 
