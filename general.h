@@ -6,10 +6,6 @@
 #include "dbmanager.h"
 #include "mymodel.h"
 
-const QStringList honapok = {"Január", "Február", "Március", "Április", "Május", "Június",
-                             "Július", "Augusztus", "Szeptember", "Október", "November", "December"};
-const QStringList muszakok = {"Nappali", "Éjszakai"};
-const QStringList reszlegek = {"Ápoló", "Karbantartó", "Orvos", "Portás", "Takarító"};
 
 namespace Ui {
 class General;
@@ -19,12 +15,6 @@ class General : public QDialog
 {
     Q_OBJECT
 
-#define NOT_USED 'F'
-#define NAPPALI  'N'
-#define EJSZAKAI 'E'
-#define PIHENO   'P'
-#define NEM_DOLGOZO 'O'
-#define MAX_NAPOK  366
 
 public:
     explicit General(QWidget *parent = nullptr);
@@ -34,7 +24,6 @@ public:
     void updateBeosztas();
     void updateTableSettings(QString ev, QString honap);
     void loadBeosztas();
-    void createBeosztas(DbRecord &dolgozok, DbBeosztas &oneRecord);
 
     void generateApolok(int startDay, int endDay);
     void generateKarbantarto();

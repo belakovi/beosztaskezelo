@@ -40,18 +40,25 @@ General::General(QWidget *parent) :
     ui->Honap->addItems(honapok);
     ui->Honap->setMinimumWidth(ui->Honap->minimumSizeHint().width());
     ui->Honap->setCurrentIndex(QDate::currentDate().month()-1);
-    ui->muszakCombo->addItems(muszakok);
+    ui->muszakCombo->addItems(apoloMuszak);
     ui->muszakCombo->setCurrentIndex(0);
     ui->reszleg->addItems(reszlegek);
     ui->reszleg->setCurrentIndex(0);
     ui->naptar->setModel(myModel);
     ui->naptar->show();
 
-    for (list<DbRecord>::iterator it=dolgozok.begin(); it!=dolgozok.end(); ++it)
+    ui->HonapValt->addItems(honapok);
+    ui->HonapValt->setCurrentIndex(QDate::currentDate().month()-1);
+    ui->HonapValt2->addItems(honapok);
+    ui->HonapValt2->setCurrentIndex(QDate::currentDate().month()-1);
+
+    for (int i=1; i<=QDate::currentDate().daysInMonth(); i++)
     {
-        if (it->reszleg == ui->reszleg->currentText())
-            ui->dolgozo->addItem(it->nev);
+        ui->NapValt->addItem(QString::number(i));
+        ui->NapValt2->addItem(QString::number(i));
     }
+    ui->NapValt->setCurrentIndex(QDate::currentDate().day()-1);
+    ui->NapValt2->setCurrentIndex(QDate::currentDate().day()-1);
 
     for (int i=0; i<31; i++)
         nevPerNap.push_back("");
@@ -149,19 +156,6 @@ void General::loadBeosztas()
     }
 }
 
-void General::createBeosztas(DbRecord &dolgozok, DbBeosztas &oneRecord)
-{
-/*    oneRecord.nev = dolgozok.nev;
-    QDate startDate = QDate::fromString(dolgozok.date,"yyyy-MM-dd");
-    int startWeek = startDate.weekNumber();
-    oneRecord.hetiBeosztas.fill(' ', 54);
-    oneRecord.hetiBeosztas[startWeek] = BEOSZTAS_CODE(dolgozok.muszak);
-    for (int week=startWeek+1; week<53; week++)
-    {
-        oneRecord.hetiBeosztas[week] = OPPOSITE_BEOSZTAS(oneRecord.hetiBeosztas[week-1]);
-    }*/
-}
-
 void General::generateApolok(int startDay, int endDay)
 {
     QChar actMuszak;
@@ -184,8 +178,8 @@ void General::generateApolok(int startDay, int endDay)
 
         for (int i=0; i<=endDay; i++)
         {
-            if ((it->beosztas.ev.at(startDay+i)==NAPPALI && ui->muszakCombo->currentText()==muszakok[0]) ||
-                (it->beosztas.ev.at(startDay+i)==EJSZAKAI && ui->muszakCombo->currentText()==muszakok[1]))
+            if ((it->beosztas.ev.at(startDay+i).unicode()==NAPPALI && ui->muszakCombo->currentText()==apoloMuszak[0]) ||
+                (it->beosztas.ev.at(startDay+i).unicode()==EJSZAKAI && ui->muszakCombo->currentText()==apoloMuszak[1]))
             {
                 nevPerNap[i] += it->nev +"\n";
             }
@@ -255,9 +249,9 @@ void General::updateBeosztas()
     {
         for (int col=0; col<maxCol; col++)
         {
-            if (index==0 && myModel->getCellDay(row, col)==1)
-                index++;
-            if(index && index<=currentDay.daysInMonth())
+            if (index==0 && myModel->getCellDay(row, col)!=1)
+                continue;
+            if(index<=currentDay.daysInMonth())
                 myModel->setCellText(row, col, nevPerNap[index++]);
         }
     }
@@ -279,17 +273,25 @@ void General::on_Ev_currentTextChanged(const QString &arg1)
 
 void General::on_reszleg_currentTextChanged(const QString &arg1)
 {
-    ui->dolgozo->clear();
+    ui->dolgozoCombo->clear();
     ui->pdfCcombo->clear();
     ui->pdfCcombo->addItem("Egész részleg");
     for (list<DbRecord>::iterator it=dolgozok.begin(); it!=dolgozok.end(); ++it)
     {
         if (it->reszleg == arg1)
         {
-            ui->dolgozo->addItem(it->nev);
+            ui->dolgozoCombo->addItem(it->nev);
             ui->pdfCcombo->addItem(it->nev);
         }
     }
+
+    ui->muszakValtCombo->clear();
+    if(arg1==reszlegek[0])
+        ui->muszakValtCombo->addItems(aMuszakok);
+    else
+        ui->muszakValtCombo->addItems(eMuszakok);
+    ui->muszakValtCombo->setCurrentIndex(0);
+
     updateTableSettings(ui->Ev->currentText(), ui->Honap->currentText());
     loadBeosztas();
     updateBeosztas();
@@ -393,7 +395,43 @@ void General::createDolgozoPdf(QString dolgozo)
 
 void General::on_ValtoztatButton_clicked()
 {
+    QDate currentDay, firstDay;
+    QDate endDate;
+    QString actMuszak;
+    int i;
+    currentDay.setDate(ui->Ev->currentText().toInt(), ui->HonapValt->currentIndex()+1, ui->NapValt->currentIndex()+1);
+    firstDay.setDate(ui->Ev->currentText().toInt(), 1, 1);
+    int startDay = firstDay.daysTo(currentDay);
 
+    for (list<beosztas_t>::iterator it=beosztas.begin(); it!=beosztas.end(); ++it)
+    {
+        if (it->nev == ui->dolgozoCombo->currentText())
+        {
+            if (ui->muszakValtCombo->currentText() != OOO)
+            {
+                actMuszak = (ui->muszakValtCombo->currentIndex()==0?NAPPALI:EJSZAKAI);
+                for (i=startDay; i<MAX_NAPOK-1; i+=2)
+                {
+                    it->beosztas.ev.replace(i, 1, actMuszak);
+                    it->beosztas.ev.replace(i+1, 1, PIHENO);
+                    actMuszak = (actMuszak==NAPPALI?EJSZAKAI:NAPPALI);
+                }
+                if (i<MAX_NAPOK)
+                    it->beosztas.ev.replace(i, 1, PIHENO);
+            }
+            else
+            { //tavollet
+                endDate.setDate(ui->Ev->currentText().toInt(), ui->HonapValt2->currentIndex()+1, ui->NapValt2->currentIndex()+1);
+                int days = currentDay.daysTo(endDate);
+                for (i=startDay; i<startDay+days; i++)
+                {
+                    it->beosztas.ev.replace(i, 1, TAVOLLET);
+                }
+            }
+        }
+    }
+    updateTableSettings(ui->Ev->currentText(), ui->Honap->currentText());
+    updateBeosztas();
 }
 
 
@@ -404,4 +442,3 @@ void General::on_MentButton_clicked()
         adatbazis->addBeosztasRecord(beosztasTablaNev, it->beosztas);
     }
 }
-

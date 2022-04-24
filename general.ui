@@ -185,7 +185,7 @@
    <property name="title">
     <string>Beosztás változás</string>
    </property>
-   <widget class="QComboBox" name="dolgozo">
+   <widget class="QComboBox" name="dolgozoCombo">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -203,7 +203,7 @@
      </font>
     </property>
    </widget>
-   <widget class="QComboBox" name="muszakValt">
+   <widget class="QComboBox" name="muszakValtCombo">
     <property name="geometry">
      <rect>
       <x>10</x>
