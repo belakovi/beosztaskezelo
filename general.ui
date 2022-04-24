@@ -78,7 +78,7 @@
      <x>60</x>
      <y>100</y>
      <width>131</width>
-     <height>21</height>
+     <height>31</height>
     </rect>
    </property>
    <property name="font">
@@ -122,7 +122,7 @@
      <x>220</x>
      <y>100</y>
      <width>91</width>
-     <height>22</height>
+     <height>31</height>
     </rect>
    </property>
    <property name="font">
@@ -145,32 +145,6 @@
    </property>
    <property name="text">
     <string>PDF írás</string>
-   </property>
-  </widget>
-  <widget class="QTextEdit" name="pdfNev">
-   <property name="geometry">
-    <rect>
-     <x>970</x>
-     <y>50</y>
-     <width>251</width>
-     <height>31</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_3">
-   <property name="geometry">
-    <rect>
-     <x>930</x>
-     <y>30</y>
-     <width>211</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Nev</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
    </property>
   </widget>
   <widget class="QLabel" name="label_4">
@@ -356,6 +330,16 @@
    </property>
    <property name="text">
     <string>Mentés</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="pdfCcombo">
+   <property name="geometry">
+    <rect>
+     <x>990</x>
+     <y>50</y>
+     <width>271</width>
+     <height>31</height>
+    </rect>
    </property>
   </widget>
  </widget>

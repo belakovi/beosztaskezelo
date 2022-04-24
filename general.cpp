@@ -280,10 +280,15 @@ void General::on_Ev_currentTextChanged(const QString &arg1)
 void General::on_reszleg_currentTextChanged(const QString &arg1)
 {
     ui->dolgozo->clear();
+    ui->pdfCcombo->clear();
+    ui->pdfCcombo->addItem("Egész részleg");
     for (list<DbRecord>::iterator it=dolgozok.begin(); it!=dolgozok.end(); ++it)
     {
         if (it->reszleg == arg1)
+        {
             ui->dolgozo->addItem(it->nev);
+            ui->pdfCcombo->addItem(it->nev);
+        }
     }
     updateTableSettings(ui->Ev->currentText(), ui->Honap->currentText());
     loadBeosztas();
@@ -298,10 +303,10 @@ void General::on_muszakCombo_currentTextChanged(const QString &arg1)
 
 void General::on_pdfButton_clicked()
 {
-    if (ui->pdfNev->toPlainText().size() == 0)
+    if (ui->pdfCcombo->currentIndex() == 0)
         createReszlegPdf(ui->reszleg->currentText());
     else
-        createDolgozoPdf(ui->pdfNev->toPlainText());
+        createDolgozoPdf(ui->pdfCcombo->currentText());
 
 }
 
@@ -309,12 +314,24 @@ void General::createReszlegPdf(QString reszleg)
 {
     QTextDocument doc;
     QString text;
+    QStringList tmp;
     QDate currentDay;
 
-    text = QStringLiteral("<p align=center> <b><font size=+12>%1 beosztás</font></b></p>").arg(ui->Honap->currentText());
+    text = QStringLiteral("<p align=center> <b><font size=+12>%1 %2 beosztás</font></b></p>").arg(ui->reszleg->currentText(), ui->Honap->currentText());
+    if (ui->reszleg->currentText() == reszlegek[0]) //apolo
+        text += QStringLiteral("<p align=center> <b><font size=+12>muszak: %1</font></b></p>").arg(ui->muszakCombo->currentText());
+
     currentDay.setDate(ui->Ev->currentText().toInt(), ui->Honap->currentIndex()+1, 1);
     for (int i=1; i<=currentDay.daysInMonth(); i++)
-        text += QStringLiteral("<p>%1 %2</p>").arg(ui->Honap->currentText()).arg(i);
+    {
+        text += QStringLiteral("<p><b>%1 %2</b></p>").arg(ui->Honap->currentText()).arg(i);
+        if(!nevPerNap[i-1].isEmpty())
+        {
+            tmp = nevPerNap[i-1].split("\n");
+            for (int cnt=0; cnt<tmp.size(); cnt++)
+                text += QStringLiteral("<p>%1</p>").arg(tmp[cnt]);
+        }
+    }
 
     doc.setHtml(text);
 /*minta...
@@ -334,7 +351,44 @@ void General::createReszlegPdf(QString reszleg)
 
 void General::createDolgozoPdf(QString dolgozo)
 {
+    QTextDocument doc;
+    QString text;
+    QDate currentDay, firstDay;
+    currentDay.setDate(ui->Ev->currentText().toInt(), ui->Honap->currentIndex()+1, 1);
+    firstDay.setDate(ui->Ev->currentText().toInt(), 1, 1);
+    int startDay = firstDay.daysTo(currentDay);
 
+    text = QStringLiteral("<p align=center> <b><font size=+12>%1 %2 beosztás</font></b></p>").arg(ui->pdfCcombo->currentText(), ui->Honap->currentText());
+
+    for (list<beosztas_t>::iterator it=beosztas.begin(); it!=beosztas.end(); ++it)
+    {
+        if (it->nev == dolgozo)
+        {
+            for (int i=0; i<currentDay.daysInMonth(); i++)
+            {
+                text += QStringLiteral("<p><b>%1 %2</b></p>").arg(ui->Honap->currentText()).arg(i+1);
+                switch (it->beosztas.ev.at(startDay+i).unicode()) {
+                case NAPPALI:
+                    text += QStringLiteral("<p>Nappali muszak</p>");
+                    break;
+                case EJSZAKAI:
+                    text += QStringLiteral("<p>Éjszakai muszak</p>");
+                    break;
+                case PIHENO:
+                    text += QStringLiteral("<p>Pihenö nap</p>");
+                    break;
+                }
+            }
+            break;
+        }
+    }
+
+    doc.setHtml(text);
+    QPrinter printer;
+    printer.setOutputFileName(dolgozo+ui->Ev->currentText()+ui->Honap->currentText()+".pdf");
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    doc.print(&printer);
+    printer.newPage();
 }
 
 void General::on_ValtoztatButton_clicked()
@@ -345,15 +399,9 @@ void General::on_ValtoztatButton_clicked()
 
 void General::on_MentButton_clicked()
 {
-    QString rec;
-
     for (list<beosztas_t>::iterator it=beosztas.begin(); it!=beosztas.end(); ++it)
     {
-        rec = adatbazis->getDolgozoBeosztas(beosztasTablaNev, it->beosztas.id);
-        if (rec.isEmpty())
-            adatbazis->addBeosztasRecord(beosztasTablaNev, it->beosztas);
-        else
-            adatbazis->updateBeosztasRecord(beosztasTablaNev, it->beosztas);
+        adatbazis->addBeosztasRecord(beosztasTablaNev, it->beosztas);
     }
 }
 
