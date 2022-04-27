@@ -52,7 +52,7 @@ void Adatkezelo::on_ButtonCancel_clicked()
 void Adatkezelo::on_ButtonSave_clicked()
 {
     QString name;
-    if ((name=myModel->checkSameName())!="")
+    if (myModel->checkSameName(name))
     {
         QMessageBox msgBox;
         QString hiba("Nem lehet ugyanaz a nev: %1");

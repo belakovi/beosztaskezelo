@@ -9,13 +9,18 @@ using namespace std;
 #define MAXHET 6
 #define MAXNAP 7
 
-typedef struct
+struct DbRecord
 {
     int     id;
     QString nev;
     QString reszleg;
     QString email;
-} DbRecord;
+
+    bool operator <(const DbRecord & dbrecordObj) const
+    {
+        return nev < dbrecordObj.nev;
+    }
+} ;
 
 typedef struct
 {
@@ -28,6 +33,9 @@ typedef struct
     QString    nev;
     DbBeosztas beosztas;
 } beosztas_t;
+
+#define LIST_BY_NAME 1
+#define LIST_BY_RESZLEG 2
 
 class DbModel : public QAbstractTableModel
 {
@@ -44,15 +52,18 @@ public:
     void clearTable(void);
     void addTableData(QStringList data);
     void updateTableData(int rowIndex, DbRecord dbData);
+    void deleteTableData(int rowIndex);
     DbRecord getOneRowData(int rowIndex);
-    QString checkSameName();
+    bool checkSameName(QString &name);
     void addOneRowToTable();
     int getEmptyID();
+    bool compare_name (DbRecord& first, DbRecord& second);
 
 private:
     int numberOfRow = 0;
     list<DbRecord> rowData;
     const QStringList columnHeader = {"Név", "Részleg", "Email"};
+    int currentOrder = LIST_BY_NAME;
 
 signals:
     void editCompleted(const QString &);
