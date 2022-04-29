@@ -16,10 +16,8 @@ Adatkezelo::Adatkezelo(QWidget *parent) :
     myModel = new DbModel();
     ui->setupUi(this);
     ui->tableView->setStyleSheet("QHeaderView::section { background-color:gray }");
-/*
-    ComboBoxItemDelegate* cbMuszak = new ComboBoxItemDelegate(ui->tableView, muszakok);
-    ui->tableView->setItemDelegateForColumn(2, cbMuszak);
-*/
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
     ComboBoxItemDelegate* cbReszleg = new ComboBoxItemDelegate(ui->tableView, reszlegek);
     ui->tableView->setItemDelegateForColumn(1, cbReszleg);
 
