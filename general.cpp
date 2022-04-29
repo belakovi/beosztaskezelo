@@ -67,10 +67,8 @@ General::General(QWidget *parent) :
         szabadnapoRecord=adatbazis->getFreeDays();
         while (!szabadnapoRecord.isEmpty())
         {
-            oneRecord.year = szabadnapoRecord[0];
-            oneRecord.month = szabadnapoRecord[1];
-            oneRecord.day   = szabadnapoRecord[2];
-            oneRecord.type  = szabadnapoRecord[3];
+            oneRecord.datum = QDate::fromString(szabadnapoRecord[0],"yyyy-MM-dd");
+            oneRecord.type  = szabadnapoRecord[1];
             exceptionDays.push_back(oneRecord);
             szabadnapoRecord=adatbazis->getFreeDays();
         }
@@ -229,7 +227,7 @@ void General::generateNormal(int startDay, int endDay)
 
             for (list<exceptionDays_t>::iterator ite=exceptionDays.begin(); ite!=exceptionDays.end(); ++ite)
             { //update all working days according to predefined data
-                currentDay.setDate(ite->year.toInt(), ite->month.toInt(), ite->day.toInt());
+                currentDay = ite->datum;
                 startDay = firstDay.daysTo(currentDay);
                 if (ite->type == "F")
                     it->beosztas.ev.replace(startDay, 1, PIHENO);

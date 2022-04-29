@@ -3,13 +3,12 @@
 
 #include <QDialog>
 #include <QStandardItemModel>
+#include <QDate>
 #include "dbmanager.h"
 #include "mymodel.h"
 
 typedef struct {
-    QString year;
-    QString month;
-    QString day;
+    QDate datum;
     QString type;
 } exceptionDays_t;
 
