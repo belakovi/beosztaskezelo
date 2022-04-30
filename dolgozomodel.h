@@ -14,7 +14,7 @@ using namespace std;
 #define LIST_BY_NAME 1
 #define LIST_BY_RESZLEG 2
 
-const QStringList columnHeaderDolgozo = {"NÃ©v", "RÃ©szleg", "Email"};
+const QStringList columnHeaderDolgozo = {"Név", "Részleg", "Email"};
 
 struct DbDolgozoRecord
 {

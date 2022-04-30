@@ -36,29 +36,6 @@ void MainWindow::resizeEvent(QResizeEvent *ev)
     QWidget::resizeEvent(ev);
 }
 
-/*void MainWindow::on_actionAdatok_triggered()
-{
-    adatkezelo = new Adatkezelo(this);
-    adatkezelo->show();
-    //Adatkezelo adatkezelo;
-    //adatkezelo.setModal(true);
-    //adatkezelo.exec();
-}*/
-
-void MainWindow::on_adatok_button_clicked()
-{
-    adatkezelo = new Adatkezelo(this);
-    adatkezelo->show();
-}
-
-
-void MainWindow::on_beosztas_button_clicked()
-{
-    general = new General(this);
-    general->show();
-}
-
-
 void MainWindow::on_actionDolgozok_triggered()
 {
     adatkezelo = new Adatkezelo(this);
