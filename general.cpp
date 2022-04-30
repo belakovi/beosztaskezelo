@@ -16,11 +16,11 @@ General::General(QWidget *parent) :
 {    
     adatbazis = new DbManager();
     QStringList oneRow;
-    oneRow=adatbazis->getAllDolgozo(true);
-    DbRecord dbRecord;
+    oneRow=adatbazis->getAllRecord(true, "dolgozok");
+    DbDolgozoRecord dbRecord;
     while(!oneRow.empty())
     {
-        oneRow = adatbazis->getAllDolgozo(false);
+        oneRow = adatbazis->getAllRecord(false, "dolgozok");
         if(!oneRow.empty())
         {
             dbRecord.id  = oneRow.at(0).toInt();
@@ -154,7 +154,7 @@ void General::loadBeosztas()
 {
     beosztas_t actBeosztas;
     beosztas.clear();
-    for (list<DbRecord>::iterator it=dolgozok.begin(); it!=dolgozok.end(); ++it)
+    for (list<DbDolgozoRecord>::iterator it=dolgozok.begin(); it!=dolgozok.end(); ++it)
     {
         if (it->reszleg == ui->reszleg->currentText())
         {
@@ -308,7 +308,7 @@ void General::on_reszleg_currentTextChanged(const QString &arg1)
     ui->dolgozoCombo->clear();
     ui->pdfCcombo->clear();
     ui->pdfCcombo->addItem("Egész részleg");
-    for (list<DbRecord>::iterator it=dolgozok.begin(); it!=dolgozok.end(); ++it)
+    for (list<DbDolgozoRecord>::iterator it=dolgozok.begin(); it!=dolgozok.end(); ++it)
     {
         if (it->reszleg == arg1)
         {

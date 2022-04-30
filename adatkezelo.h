@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include <dbmanager.h>
-#include "dbmodel.h"
+#include "dolgozomodel.h"
 
 namespace Ui {
 class Adatkezelo;
@@ -25,7 +25,7 @@ private slots:
 
 private:
     Ui::Adatkezelo *ui;
-    DbModel *myModel;
+    dolgozoModel *myModel;
     DbManager *adatbazis;
 };
 

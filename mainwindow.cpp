@@ -59,7 +59,7 @@ void MainWindow::on_beosztas_button_clicked()
 }
 
 
-void MainWindow::on_actionAdatok_2_triggered()
+void MainWindow::on_actionDolgozok_triggered()
 {
     adatkezelo = new Adatkezelo(this);
     adatkezelo->show();
@@ -70,5 +70,12 @@ void MainWindow::on_actionBeosztas_triggered()
 {
     general = new General(this);
     general->show();
+}
+
+
+void MainWindow::on_actionMunkanapValtozas_triggered()
+{
+    munkanapValt = new MunkanapValt(this);
+    munkanapValt->show();
 }
 

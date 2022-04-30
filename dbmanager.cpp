@@ -59,18 +59,18 @@ QStringList DbManager::getFreeDays()
     return oneRecord;
 }
 
-QStringList DbManager::getAllDolgozo(bool first)
+QStringList DbManager::getAllRecord(bool first, QString tableName)
 {
     QStringList oneRecord = {};
 
     if (first)
     {
-        query = new QSqlQuery(QString("SELECT * FROM dolgozok"));
+        query = new QSqlQuery(QString("SELECT * FROM %1").arg(tableName));
         if (!query->exec())
         {
             QMessageBox msgBox;
-            QString hiba("Adatbazis hiba (getAllDolgozo): %1");
-            msgBox.setText(hiba.arg(query->lastError().text()));
+            QString hiba("Adatbazis hiba (getAllRecord, %2): %1");
+            msgBox.setText(hiba.arg(tableName, query->lastError().text()));
             msgBox.exec();
             delete query;
         }
@@ -79,23 +79,38 @@ QStringList DbManager::getAllDolgozo(bool first)
     }
     else
     {
-        if( query->next() )
+        if (tableName == "dolgozok")
         {
-            oneRecord << query->value(0).toString();
-            oneRecord << query->value(1).toString();
-            oneRecord << query->value(2).toString();
-            oneRecord << query->value(3).toString();
+            if( query->next() )
+            {
+                oneRecord << query->value(0).toString();
+                oneRecord << query->value(1).toString();
+                oneRecord << query->value(2).toString();
+                oneRecord << query->value(3).toString();
+            }
+            else
+            {
+                delete query;
+            }
         }
         else
         {
-            delete query;
+            if( query->next() )
+            {
+                oneRecord << query->value(0).toString();
+                oneRecord << query->value(1).toString();
+            }
+            else
+            {
+                delete query;
+            }
         }
     }
 
     return oneRecord;
 }
 
-int DbManager::getRecordCount()
+int DbManager::getDolgozokRecordCount()
 {
     QSqlQuery query;
     query.prepare("SELECT COUNT(*) FROM dolgozok");
@@ -104,9 +119,18 @@ int DbManager::getRecordCount()
     return query.value(0).toInt();
 }
 
-int DbManager::clearTable()
+int DbManager::getNapokRecordCount()
 {
-    QSqlQuery query(QString("DELETE FROM dolgozok"));
+    QSqlQuery query;
+    query.prepare("SELECT COUNT(*) FROM munkanapValtozas");
+    query.exec();
+    query.next();
+    return query.value(0).toInt();
+}
+
+int DbManager::clearTable(QString tableName)
+{
+    QSqlQuery query(QString("DELETE FROM %1").arg(tableName));
     if (!query.exec())
     {
         QMessageBox msgBox;
@@ -118,7 +142,7 @@ int DbManager::clearTable()
     return SUCCESS;
 }
 
-int DbManager::addDolgozo(DbRecord szemelyAdat)
+int DbManager::addDolgozo(DbDolgozoRecord szemelyAdat)
 {
    QSqlQuery query;
 
@@ -131,12 +155,34 @@ int DbManager::addDolgozo(DbRecord szemelyAdat)
    if(!query.exec())
    {
        QMessageBox msgBox;
-       QString hiba("Adatbazis hiba (addRecord): %1");
+       QString hiba("Adatbazis hiba (addRecord dolgozo): %1");
        msgBox.setText(hiba.arg(query.lastError().text()));
        msgBox.exec();
        return PROBLEM;
    }
    return SUCCESS;
+}
+
+int DbManager::addNapok(DbNapRecord data)
+{
+    QSqlQuery query;
+
+    query.prepare("INSERT INTO munkanapValtozas (datum, type) "
+                  "VALUES (:date, :stat)");
+    query.bindValue(":date", data.datum);
+    if(data.status==napStatus[0])
+        query.bindValue(":stat", MUNKANAP);
+    else
+        query.bindValue(":stat", SZABADNAP);
+    if(!query.exec())
+    {
+        QMessageBox msgBox;
+        QString hiba("Adatbazis hiba (addRecord nap): %1");
+        msgBox.setText(hiba.arg(query.lastError().text()));
+        msgBox.exec();
+        return PROBLEM;
+    }
+    return SUCCESS;
 }
 
 int DbManager::createBeosztasTable(QString year)

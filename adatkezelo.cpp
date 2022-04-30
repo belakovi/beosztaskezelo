@@ -13,7 +13,7 @@ Adatkezelo::Adatkezelo(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Adatkezelo)
 {
-    myModel = new DbModel();
+    myModel = new dolgozoModel();
     ui->setupUi(this);
     ui->tableView->setStyleSheet("QHeaderView::section { background-color:gray }");
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -22,15 +22,15 @@ Adatkezelo::Adatkezelo(QWidget *parent) :
     ui->tableView->setItemDelegateForColumn(1, cbReszleg);
 
     adatbazis = new DbManager();
-    int rowCount = adatbazis->getRecordCount();
+    int rowCount = adatbazis->getDolgozokRecordCount();
     myModel->setRowCount(rowCount+100);
     QStringList oneRow;
-    oneRow=adatbazis->getAllDolgozo(true);
+    oneRow=adatbazis->getAllRecord(true, "dolgozok");
     while(!oneRow.empty())
     {
-        oneRow = adatbazis->getAllDolgozo(false);
+        oneRow = adatbazis->getAllRecord(false, "dolgozok");
         if (!oneRow.empty())
-            myModel->addTableData(oneRow);
+            myModel->addTableDolgozoData(oneRow);
     }
     ui->tableView->setModel(myModel);
 }
@@ -59,10 +59,10 @@ void Adatkezelo::on_ButtonSave_clicked()
         return;
     }
 
-    if (adatbazis->clearTable() == SUCCESS)
+    if (adatbazis->clearTable("dolgozok") == SUCCESS)
     {
         int index = 0;
-        DbRecord oneRowData = myModel->getOneRowData(index++);
+        DbDolgozoRecord oneRowData = myModel->getOneRowData(index++);
         while (oneRowData.nev != "")
         {
             adatbazis->addDolgozo(oneRowData);

@@ -57,7 +57,7 @@ private:
     QStandardItemModel *model;
     DbManager *adatbazis;
     QString beosztasTablaNev = "";
-    list<DbRecord> dolgozok;
+    list<DbDolgozoRecord> dolgozok;
     list<beosztas_t> beosztas;
     QStringList nevPerNap;
     MyModel *myModel;

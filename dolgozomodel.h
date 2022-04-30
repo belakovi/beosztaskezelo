@@ -1,22 +1,29 @@
-#ifndef DBMODEL_H
-#define DBMODEL_H
+#ifndef DOLGOZOMODEL_H
+#define DOLGOZOMODEL_H
 
 #include <QAbstractTableModel>
 #include <list>
+#include <QDate>
 
 using namespace std;
 
 #define MAXHET 6
 #define MAXNAP 7
+#define MUNKANAP  "M"
+#define SZABADNAP "F"
+#define LIST_BY_NAME 1
+#define LIST_BY_RESZLEG 2
 
-struct DbRecord
+const QStringList columnHeaderDolgozo = {"NÃ©v", "RÃ©szleg", "Email"};
+
+struct DbDolgozoRecord
 {
     int     id;
     QString nev;
     QString reszleg;
     QString email;
 
-    bool operator <(const DbRecord & dbrecordObj) const
+    bool operator <(const DbDolgozoRecord & dbrecordObj) const
     {
         return nev < dbrecordObj.nev;
     }
@@ -34,14 +41,11 @@ typedef struct
     DbBeosztas beosztas;
 } beosztas_t;
 
-#define LIST_BY_NAME 1
-#define LIST_BY_RESZLEG 2
-
-class DbModel : public QAbstractTableModel
+class dolgozoModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    DbModel(QObject *parent = nullptr);
+    dolgozoModel(QObject *parent = nullptr);
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
@@ -50,19 +54,18 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     void setRowCount(int row);
     void clearTable(void);
-    void addTableData(QStringList data);
-    void updateTableData(int rowIndex, DbRecord dbData);
+    void addTableDolgozoData(QStringList data);
+    void updateTableData(int rowIndex, DbDolgozoRecord dbData);
     void deleteTableData(int rowIndex);
-    DbRecord getOneRowData(int rowIndex);
+    DbDolgozoRecord getOneRowData(int rowIndex);
     bool checkSameName(QString &name);
     void addOneRowToTable();
     int getEmptyID();
-    bool compare_name (DbRecord& first, DbRecord& second);
+    bool compare_name (DbDolgozoRecord& first, DbDolgozoRecord& second);
 
 private:
     int numberOfRow = 0;
-    list<DbRecord> rowData;
-    const QStringList columnHeader = {"Név", "Részleg", "Email"};
+    list<DbDolgozoRecord> rowDolgozoData;
     int currentOrder = LIST_BY_NAME;
 
 signals:

@@ -14,25 +14,30 @@ SOURCES += \
     adatkezelo.cpp \
     comboboxitemdelegate.cpp \
     dbmanager.cpp \
-    dbmodel.cpp \
+    dolgozomodel.cpp \
     general.cpp \
     main.cpp \
     mainwindow.cpp \
-    mymodel.cpp
+    munkanapvalt.cpp \
+    mymodel.cpp \
+    napmodel.cpp
 
 HEADERS += \
     adatkezelo.h \
     comboboxitemdelegate.h \
     dbmanager.h \
-    dbmodel.h \
+    dolgozomodel.h \
     general.h \
     mainwindow.h \
-    mymodel.h
+    munkanapvalt.h \
+    mymodel.h \
+    napmodel.h
 
 FORMS += \
     adatkezelo.ui \
     general.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    munkanapvalt.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

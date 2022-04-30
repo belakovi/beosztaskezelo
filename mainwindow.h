@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "adatkezelo.h"
 #include "general.h"
+#include "munkanapvalt.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -27,13 +28,17 @@ private slots:
 
     void on_beosztas_button_clicked();
 
-    void on_actionAdatok_2_triggered();
+    void on_actionDolgozok_triggered();
 
     void on_actionBeosztas_triggered();
+
+    void on_actionMunkanapValtozas_triggered();
 
 private:
     Ui::MainWindow *ui;
     Adatkezelo *adatkezelo;
     General *general;
+    MunkanapValt *munkanapValt;
+
 };
 #endif // MAINWINDOW_H

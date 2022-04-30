@@ -2,7 +2,8 @@
 #define DBMANAGER_H
 #include <QSqlDatabase>
 #include <QSqlQuery>
-#include "dbmodel.h"
+#include "dolgozomodel.h"
+#include "napmodel.h"
 
 using namespace std;
 
@@ -33,11 +34,13 @@ class DbManager
 public:
     DbManager();
     ~DbManager();
-    int clearTable();
-    int addDolgozo(DbRecord data);
+    int clearTable(QString tableName);
+    int addDolgozo(DbDolgozoRecord data);
+    int addNapok(DbNapRecord data);
     void findPerson(QString nev);
-    int getRecordCount();
-    QStringList getAllDolgozo(bool first);
+    int getDolgozokRecordCount();
+    int getNapokRecordCount();
+    QStringList getAllRecord(bool first, QString tableName);
     int createBeosztasTable(QString year);
     QString getDolgozoBeosztas(QString dbNev, int id);
     void addBeosztasRecord(QString dbNev, DbBeosztas &beosztas);

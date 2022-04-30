@@ -1,30 +1,30 @@
-#include "dbmodel.h"
+#include "dolgozomodel.h"
 #include <QDate>
 
-DbModel::DbModel(QObject *parent)
+dolgozoModel::dolgozoModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
 }
 
-void DbModel::setRowCount(int row)
+void dolgozoModel::setRowCount(int row)
 {
     numberOfRow = row;
 }
 
-int DbModel::rowCount(const QModelIndex & /*parent*/) const
+int dolgozoModel::rowCount(const QModelIndex & /*parent*/) const
 {
    return numberOfRow;
 }
 
-int DbModel::columnCount(const QModelIndex & /*parent*/) const
+int dolgozoModel::columnCount(const QModelIndex & /*parent*/) const
 {
-    return columnHeader.size();
+    return columnHeaderDolgozo.size();
 }
 
-QVariant DbModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant dolgozoModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
-        return columnHeader.at(section);
+        return columnHeaderDolgozo.at(section);
     }
 
     if (role == Qt::DisplayRole && orientation == Qt::Vertical) {
@@ -33,56 +33,56 @@ QVariant DbModel::headerData(int section, Qt::Orientation orientation, int role)
     return QVariant();
 }
 
-bool DbModel::compare_name (DbRecord& first, DbRecord& second)
+bool dolgozoModel::compare_name (DbDolgozoRecord& first, DbDolgozoRecord& second)
 {
     return (first.nev > second.nev);
 }
 
-void DbModel::addTableData(QStringList dbData)
+void dolgozoModel::addTableDolgozoData(QStringList dbData)
 {
-    DbRecord data;
+    DbDolgozoRecord data;
     data.id      = dbData.at(0).toInt();
     data.nev     = dbData.at(1);
     data.reszleg = dbData.at(2);
     data.email   = dbData.at(3);
-    rowData.push_back(data);
+    rowDolgozoData.push_back(data);
 
-    rowData.sort();
+    rowDolgozoData.sort();
 }
 
-void DbModel::updateTableData(int rowIndex, DbRecord dbData)
+void dolgozoModel::updateTableData(int rowIndex, DbDolgozoRecord dbData)
 {
-    if(rowIndex<0 || rowIndex>(int)rowData.size()) //if index points to invalid place then don't update
+    if(rowIndex<0 || rowIndex>(int)rowDolgozoData.size()) //if index points to invalid place then don't update
         return;
-    auto it =  rowData.begin();
+    auto it =  rowDolgozoData.begin();
     advance(it, rowIndex);
     *it = dbData;
 }
 
-void DbModel::clearTable()
+void dolgozoModel::clearTable()
 {
     beginResetModel();
     numberOfRow = 0;
-    rowData.clear();
+    rowDolgozoData.clear();
     endResetModel();
 }
 
-void DbModel::addOneRowToTable()
+void dolgozoModel::addOneRowToTable()
 {
     beginResetModel();
     numberOfRow += 1;
     endResetModel();
 }
 
-QVariant DbModel::data(const QModelIndex &index, int role) const
+QVariant dolgozoModel::data(const QModelIndex &index, int role) const
 {
     switch (role)
     {
     case Qt::DisplayRole:
         int row = index.row();
-        if (row>=(int)rowData.size())
+        if (row>=(int)rowDolgozoData.size())
             return QVariant();
-        auto it =  rowData.begin();
+        auto it =  rowDolgozoData.begin();
         advance(it, row);
         switch (index.column())
         {
@@ -98,18 +98,18 @@ QVariant DbModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-bool compare_nocase (const DbRecord& first, const DbRecord& second)
+bool compare_nocase (const DbDolgozoRecord& first, const DbDolgozoRecord& second)
 {
     return (first.nev<second.nev);
 }
 
-bool DbModel::checkSameName(QString &name)
+bool dolgozoModel::checkSameName(QString &name)
 {
-    rowData.sort(compare_nocase);
-    list<DbRecord>::iterator it = rowData.begin();
-    list<DbRecord>::iterator nextIt = rowData.begin();
+    rowDolgozoData.sort(compare_nocase);
+    list<DbDolgozoRecord>::iterator it = rowDolgozoData.begin();
+    list<DbDolgozoRecord>::iterator nextIt = rowDolgozoData.begin();
     nextIt++;
-    for (int i=0; i+1<(int)rowData.size(); i++)
+    for (int i=0; i+1<(int)rowDolgozoData.size(); i++)
     {
         if (it->nev == nextIt->nev && it->reszleg==nextIt->reszleg)
         {
@@ -122,52 +122,52 @@ bool DbModel::checkSameName(QString &name)
     return false;
 }
 
-DbRecord DbModel::getOneRowData(int rowIndex)
+DbDolgozoRecord dolgozoModel::getOneRowData(int rowIndex)
 {
-    if (  rowIndex<(int)rowData.size() )
+    if (  rowIndex<(int)rowDolgozoData.size() )
     {
-        list<DbRecord>::iterator it = rowData.begin();
+        list<DbDolgozoRecord>::iterator it = rowDolgozoData.begin();
         advance(it, rowIndex);
         return *it;
     }
-    DbRecord tmp;
+    DbDolgozoRecord tmp;
     tmp.nev = "";
     return tmp;
 }
 
-Qt::ItemFlags DbModel::flags(const QModelIndex &index) const
+Qt::ItemFlags dolgozoModel::flags(const QModelIndex &index) const
 {
     return  Qt::ItemIsSelectable|Qt::ItemIsEnabled|Qt::ItemIsEditable | QAbstractTableModel::flags(index);
 }
 
-int DbModel::getEmptyID()
+int dolgozoModel::getEmptyID()
 {
-    list<DbRecord>::iterator it;
+    list<DbDolgozoRecord>::iterator it;
 
     //search for empty place
     for (int i=0; i<INT_MAX; i++)
     {        
-        for (it=rowData.begin(); it != rowData.end(); ++it)
+        for (it=rowDolgozoData.begin(); it != rowDolgozoData.end(); ++it)
         {
             if (it->id==i)
                 break;
         }
-        if(it == rowData.end())
+        if(it == rowDolgozoData.end())
             return i;
     }
     return INT_MAX;
 }
 
-bool DbModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool dolgozoModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (role == Qt::EditRole) {
         if (!checkIndex(index))
             return false;
 
-        DbRecord oneRowData;
-        if ((int)rowData.size()<=index.row())
+        DbDolgozoRecord oneRowData;
+        if ((int)rowDolgozoData.size()<=index.row())
         {//update the table data before we load other row data
-            rowData.push_back(oneRowData);
+            rowDolgozoData.push_back(oneRowData);
         }
         oneRowData = getOneRowData(index.row());
         //save value from editor to member m_gridData
@@ -176,9 +176,9 @@ bool DbModel::setData(const QModelIndex &index, const QVariant &value, int role)
             oneRowData.nev = value.toString();
             if (oneRowData.nev == "")
             {
-                auto it =  rowData.begin();
+                auto it =  rowDolgozoData.begin();
                 advance(it, index.row());
-                rowData.erase(it);
+                rowDolgozoData.erase(it);
                 return true;
             }
 
