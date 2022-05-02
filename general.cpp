@@ -190,7 +190,7 @@ void General::generateApolok(int startDay, int endDay)
                 it->beosztas.ev.replace(i, 1, PIHENO);
         }
 
-        for (int i=0; i<=endDay; i++)
+        for (int i=0; i<endDay; i++)
         {
             if ((it->beosztas.ev.at(startDay+i).unicode()==NAPPALI && ui->muszakCombo->currentText()==apoloMuszak[0]) ||
                 (it->beosztas.ev.at(startDay+i).unicode()==EJSZAKAI && ui->muszakCombo->currentText()==apoloMuszak[1]))
