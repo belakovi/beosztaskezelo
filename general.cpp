@@ -236,7 +236,7 @@ void General::generateNormal(int startDay, int endDay)
             }
         }
 
-        for (int i=0; i<=endDay; i++)
+        for (int i=0; i<endDay; i++)
         {
             if (it->beosztas.ev.at(startDay+i).unicode()==NORMAL)
             {
@@ -283,7 +283,7 @@ void General::updateBeosztas()
         {
             if (index==0 && myModel->getCellDay(row, col)!=1)
                 continue;
-            if(index<=currentDay.daysInMonth())
+            if(index<currentDay.daysInMonth())
                 myModel->setCellText(row, col, nevPerNap[index++]);
         }
     }
