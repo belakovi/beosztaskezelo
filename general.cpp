@@ -9,6 +9,7 @@
 #include <QtDebug>
 #include <QPrinter>
 #include <QPdfWriter>
+#include <QFileDialog>
 
 General::General(QWidget *parent) :
     QDialog(parent),
@@ -77,6 +78,10 @@ General::General(QWidget *parent) :
     for (int i=0; i<31; i++)
         nevPerNap.push_back("");
     updateBeosztas();
+
+    ui->toolButton->setIcon(QIcon("/dani/beosztaskezelo/foldericon.png"));
+    ui->dirName->setText(QDir::currentPath());
+    QApplication::processEvents();
 }
 
 General::~General()
@@ -377,7 +382,8 @@ void General::createReszlegPdf(QString reszleg)
                "paragraphs. It is properly wrapped and such...</p>" );
 */
     QPrinter printer;
-    printer.setOutputFileName(reszleg+ui->Ev->currentText()+ui->Honap->currentText()+".pdf");
+    QString nameStr = ui->dirName->text()+"/"+reszleg+ui->Ev->currentText()+ui->Honap->currentText()+".pdf";
+    printer.setOutputFileName(nameStr);
     printer.setOutputFormat(QPrinter::PdfFormat);
     doc.print(&printer);
     printer.newPage();
@@ -419,7 +425,8 @@ void General::createDolgozoPdf(QString dolgozo)
 
     doc.setHtml(text);
     QPrinter printer;
-    printer.setOutputFileName(dolgozo+ui->Ev->currentText()+ui->Honap->currentText()+".pdf");
+    QString nameStr = ui->dirName->text()+"/"+dolgozo+ui->Ev->currentText()+ui->Honap->currentText()+".pdf";
+    printer.setOutputFileName(nameStr);
     printer.setOutputFormat(QPrinter::PdfFormat);
     doc.print(&printer);
     printer.newPage();
@@ -474,3 +481,12 @@ void General::on_MentButton_clicked()
         adatbazis->addBeosztasRecord(beosztasTablaNev, it->beosztas);
     }
 }
+
+void General::on_toolButton_clicked()
+{
+    ui->dirName->setText(QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+                                                           "/home",
+                                                           QFileDialog::ShowDirsOnly
+                                                           | QFileDialog::DontResolveSymlinks));
+}
+

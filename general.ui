@@ -137,7 +137,7 @@
   <widget class="QPushButton" name="pdfButton">
    <property name="geometry">
     <rect>
-     <x>1050</x>
+     <x>970</x>
      <y>90</y>
      <width>80</width>
      <height>51</height>
@@ -335,11 +335,50 @@
   <widget class="QComboBox" name="pdfCcombo">
    <property name="geometry">
     <rect>
-     <x>990</x>
-     <y>50</y>
-     <width>271</width>
+     <x>1060</x>
+     <y>100</y>
+     <width>181</width>
      <height>31</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QToolButton" name="toolButton">
+   <property name="geometry">
+    <rect>
+     <x>980</x>
+     <y>50</y>
+     <width>27</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>...</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="dirName">
+   <property name="geometry">
+    <rect>
+     <x>1010</x>
+     <y>50</y>
+     <width>221</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>980</x>
+     <y>20</y>
+     <width>171</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>PDF könyvtár:</string>
    </property>
   </widget>
  </widget>

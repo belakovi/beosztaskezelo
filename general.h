@@ -52,6 +52,8 @@ private slots:
 
     void on_MentButton_clicked();
 
+    void on_toolButton_clicked();
+
 private:
     Ui::General *ui;
     QStandardItemModel *model;
