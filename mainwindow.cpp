@@ -16,7 +16,6 @@ MainWindow::MainWindow(QWidget *parent)
     QPalette palette;
     palette.setBrush(QPalette::Window, bkgnd);
     this->setPalette(palette);
-
 }
 
 MainWindow::~MainWindow()

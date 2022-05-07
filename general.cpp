@@ -10,6 +10,7 @@
 #include <QPrinter>
 #include <QPdfWriter>
 #include <QFileDialog>
+#include <QDesktopServices>
 
 General::General(QWidget *parent) :
     QDialog(parent),
@@ -387,6 +388,7 @@ void General::createReszlegPdf(QString reszleg)
     printer.setOutputFormat(QPrinter::PdfFormat);
     doc.print(&printer);
     printer.newPage();
+    QDesktopServices::openUrl(QUrl::fromLocalFile(nameStr));
 }
 
 void General::createDolgozoPdf(QString dolgozo)
@@ -430,6 +432,7 @@ void General::createDolgozoPdf(QString dolgozo)
     printer.setOutputFormat(QPrinter::PdfFormat);
     doc.print(&printer);
     printer.newPage();
+    QDesktopServices::openUrl(QUrl::fromLocalFile(nameStr));
 }
 
 void General::on_ValtoztatButton_clicked()

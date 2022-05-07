@@ -178,7 +178,7 @@
     <rect>
      <x>390</x>
      <y>0</y>
-     <width>441</width>
+     <width>551</width>
      <height>141</height>
     </rect>
    </property>
@@ -318,19 +318,22 @@
      <string>Változtat</string>
     </property>
    </widget>
-  </widget>
-  <widget class="QPushButton" name="MentButton">
-   <property name="geometry">
-    <rect>
-     <x>860</x>
-     <y>20</y>
-     <width>81</width>
-     <height>121</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Mentés</string>
-   </property>
+   <widget class="QPushButton" name="MentButton">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>10</y>
+      <width>81</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="text">
+     <string>Mentés</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QComboBox" name="pdfCcombo">
    <property name="geometry">
